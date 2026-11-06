@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Welcome, {{ g.user.name }}</h1>
+<p class="muted">You are logged in as <strong>{{ g.user.profileName }}</strong>.</p>
+{% if menu_items %}
+<div class="tiles">
+  {% for label, endpoint in menu_items %}
+    <a class="tile" href="{{ url_for(endpoint) }}">{{ label }}</a>
+  {% endfor %}
+</div>
+{% else %}
+<p class="muted">No functions are available for your role yet.</p>
+{% endif %}
+{% if g.user.profileName == 'Customer' %}
+<h2 style="margin-top:28px">Projects you might like</h2>
+{% if interests %}
+<p class="muted">From your interests: {{ interests|join(', ') }}
+  (<a href="{{ url_for('choose_preferences.displayPreferenceForm') }}">change</a>)</p>
+{% else %}
+<p class="muted"><a href="{{ url_for('choose_preferences.displayPreferenceForm') }}">Choose your interests</a>
+  to see projects from your favourite categories here.</p>
+{% endif %}
+{% if recommendations %}
+<div class="idp-grid">
+  {% for idp in recommendations %}{% include "_idp_card.html" %}{% endfor %}
+</div>
+{% endif %}
+<p><a href="{{ url_for('browse_idp.displayBrowsePage') }}">Browse all projects &rarr;</a></p>
+{% endif %}
+{% endblock %}

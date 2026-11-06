@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Activity Log - {{ account.username }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('view_activity_log.searchAccount') }}">&larr; Back to search</a></p>
+<h1>Activity Log: {{ account.username }}</h1>
+<p class="muted">{{ account.name }} &middot; {{ account.profileName }} &middot; Status: <strong>{{ account.status }}</strong></p>
+
+<form method="get" class="card" style="display:flex;flex-wrap:wrap;gap:10px;align-items:end">
+  <label style="margin:0">Activity type
+    <select name="type">
+      <option value="">All types</option>
+      {% for t in types %}<option {% if filters.type == t %}selected{% endif %}>{{ t }}</option>{% endfor %}
+    </select></label>
+  <label style="margin:0">From <input type="date" name="from" value="{{ filters['from'] }}"></label>
+  <label style="margin:0">To <input type="date" name="to" value="{{ filters.to }}"></label>
+  <button class="btn" type="submit">Apply</button>
+  <a class="btn btn-secondary" href="{{ url_for('view_activity_log.displayActivityLog', accountID=account.accountID) }}">Clear</a>
+  <a class="btn btn-secondary" href="{{ url_for('view_activity_log.clickExport', accountID=account.accountID, type=filters.type, **{'from': filters['from'], 'to': filters.to}) }}">Export CSV</a>
+</form>
+
+<div class="actions" style="margin-bottom:14px">
+  <a class="btn btn-secondary" href="{{ url_for('edit_user_account.displayEditForm', accountID=account.accountID) }}">Edit Account</a>
+  {% if account.status == 'Active' and account.accountID != g.user.accountID %}
+  <form method="post" action="{{ url_for('view_activity_log.clickSuspend', accountID=account.accountID) }}"
+        onsubmit="return confirm('Suspend {{ account.username }}?');">
+    <button class="btn btn-danger" type="submit">Suspend Account</button></form>
+  {% elif account.status == 'Suspended' %}
+  <form method="post" action="{{ url_for('view_activity_log.clickReactivate', accountID=account.accountID) }}"
+        onsubmit="return confirm('Reactivate {{ account.username }}?');">
+    <button class="btn" type="submit">Reactivate Account</button></form>
+  {% endif %}
+</div>
+
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+{% if logs %}
+<p class="muted">{{ logs|length }} entr{{ 'y' if logs|length == 1 else 'ies' }}, newest first.</p>
+<table>
+  <tr><th>Date/Time</th><th>Activity Type</th><th>Description</th><th>Performed By</th><th>IP Address</th></tr>
+  {% for l in logs %}
+  <tr><td>{{ l.timestamp }}</td><td>{{ l.activityType }}</td><td>{{ l.description }}</td>
+      <td>{{ l.performedByName }}</td><td>{{ l.ipAddress or '' }}</td></tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

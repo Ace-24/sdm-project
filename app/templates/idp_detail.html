@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ idp.title }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('browse_idp.displayBrowsePage') }}">&larr; Browse projects</a></p>
+{% if idp.status != 'Active' %}<div class="flash flash-error">This project is {{ idp.status|lower }} and not visible to customers.</div>{% endif %}
+<div class="detail-head">
+  <div>
+    <h1>{{ idp.title }}</h1>
+    <p class="muted">by <a href="{{ url_for('company_profile.displayDesignerPage', designerID=idp.designerID) }}"><strong>{{ company.companyName if company else idp.designerName }}</strong></a> &middot; {{ idp.style or 'No category' }}</p>
+  </div>
+  {% if is_customer %}
+  <form method="post" action="{{ url_for('view_idp.clickFavourite', idpID=idp.idpID) }}">
+    <input type="hidden" name="property" value="{{ request.args.get('property', '') }}">
+    <button class="btn {{ 'btn-secondary' if saved else '' }}" type="submit">{{ 'Saved - remove from favourites' if saved else 'Save to favourites' }}</button>
+  </form>
+  {% elif not g.user %}
+  <a class="btn" href="{{ url_for('sign_up.displaySignUpForm') }}">Sign up to save this project</a>
+  {% endif %}
+</div>
+
+<div class="gallery">
+  {% if idp.photoURLs %}
+    {% for p in idp.photoURLs %}<img src="{{ url_for('static', filename='uploads/' ~ p) }}" alt="Design photo {{ loop.index }}">{% endfor %}
+  {% else %}
+    <div class="cover cover-empty" style="height:220px">{{ (idp.style or 'Design').split(',')[0] }} design</div>
+  {% endif %}
+</div>
+
+<div class="detail-grid">
+  <div class="card">
+    <h2>Project details</h2>
+    <p>{{ idp.description }}</p>
+    <table>
+      <tr><th>Property type</th><td>{{ idp.propertyType }}</td></tr>
+      <tr><th>Floor area</th><td>{{ idp.floorArea }} sqm</td></tr>
+      <tr><th>Completed</th><td>{{ idp.completionDate }}</td></tr>
+      <tr><th>Categories</th><td>{{ idp.style or '-' }}</td></tr>
+    </table>
+  </div>
+  <div>
+  <div class="card">
+    <h2>Cost estimate</h2>
+    <p class="big">S${{ '{:,.2f}'.format(idp.totalCost) }}</p>
+    <p class="muted">before GST, for this {{ idp.propertyType }} project &middot; S${{ '{:,.2f}'.format(idp.getCostPerSqm()) }} per sqm</p>
+  </div>
+  <div class="card">
+    <h2>About the designer</h2>
+    {% if company %}
+    <p><strong>{{ company.companyName }}</strong><br><span class="muted">{{ idp.designerName }}</span></p>
+    <p class="muted">{{ company.phone }} &middot; {{ company.email }}</p>
+    {% else %}<p>{{ idp.designerName }}</p>{% endif %}
+    <a href="{{ url_for('company_profile.displayDesignerPage', designerID=idp.designerID) }}">See all projects by this designer &rarr;</a>
+  </div>
+  </div>
+</div>
+
+<div class="card" id="breakdown">
+  <h2>Cost breakdown</h2>
+  <form method="get" action="#breakdown" style="display:flex;gap:10px;align-items:end;max-width:460px">
+    <label style="flex:1;margin:0">See the cost for a
+      <select name="property" onchange="this.form.submit()">
+        {% for p in property_types %}<option {% if p == b.propertyType %}selected{% endif %}>{{ p }}</option>{% endfor %}
+      </select></label>
+    <noscript><button class="btn" type="submit">Update</button></noscript>
+  </form>
+  <p class="muted">Unit rates are set by the designer for this {{ idp.propertyType }} project.
+    {% if b.propertyType != idp.propertyType %}Prices are adjusted &times;{{ '%.2f'|format(b.factor) }} for a {{ b.propertyType }}.{% endif %}</p>
+  {% if b.lines %}
+  <table>
+    <tr><th>Item</th><th>Quantity</th><th>Unit rate (S$)</th><th>Cost (S$)</th></tr>
+    {% for item, line in b.lines %}
+    <tr><td>{{ item.itemName }}</td><td>{{ item.quantity|round(1) }} {{ item.unit }}</td>
+        <td>{{ '%.2f'|format(item.unitRate * b.factor) }}</td><td>{{ '{:,.2f}'.format(line) }}</td></tr>
+    {% endfor %}
+    <tr><th colspan="3" style="text-align:right">Subtotal</th><td>{{ '{:,.2f}'.format(b.subtotal) }}</td></tr>
+    <tr><th colspan="3" style="text-align:right">GST (9%)</th><td>{{ '{:,.2f}'.format(b.gst) }}</td></tr>
+    <tr><th colspan="3" style="text-align:right">Estimated total (SGD)</th><td><strong>{{ '{:,.2f}'.format(b.total) }}</strong></td></tr>
+  </table>
+  <p class="muted">This is an estimate only. Contact the designer for an exact quotation.</p>
+  {% else %}<p class="muted">The designer has not added a cost breakdown yet.</p>{% endif %}
+</div>
+{% endblock %}

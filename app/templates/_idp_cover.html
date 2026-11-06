@@ -1,0 +1,5 @@
+{% if idp.photoURLs %}
+  <img class="cover" src="{{ url_for('static', filename='uploads/' ~ idp.photoURLs[0]) }}" alt="{{ idp.title }}">
+{% else %}
+  <div class="cover cover-empty">{{ (idp.style or 'IDP').split(',')[0] }}</div>
+{% endif %}

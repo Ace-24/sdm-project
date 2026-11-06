@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Company Information{% endblock %}
+{% block content %}
+<h1>Company Information</h1>
+<p class="muted">Customers see this on your project pages and on <a href="{{ url_for('company_profile.displayDesignerPage', designerID=cp.designerID) }}">your designer page</a>.
+  {% if cp.updatedDate %}Last updated {{ cp.updatedDate[:10] }}.{% endif %}</p>
+{% if errors %}
+<div class="flash flash-error"><strong>Please fix the following:</strong>
+  <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>
+{% endif %}
+<form method="post" class="card" style="max-width:640px">
+  <label>Company name <input name="company_name" value="{{ cp.companyName or '' }}" required></label>
+  <label>UEN (company registration number) <input name="uen" value="{{ cp.uen or '' }}" placeholder="e.g. 201912345K"></label>
+  <label>Address <input name="address" value="{{ cp.address or '' }}"></label>
+  <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <label style="flex:1;min-width:200px">Phone <input name="phone" value="{{ cp.phone or '' }}" required></label>
+    <label style="flex:1;min-width:200px">Email <input name="email" type="email" value="{{ cp.email or '' }}" required></label>
+  </div>
+  <label>Website <input name="website" value="{{ cp.website or '' }}" placeholder="https://"></label>
+  <label>About the company <textarea name="description" rows="4" maxlength="1000">{{ cp.description or '' }}</textarea></label>
+  <button class="btn" type="submit">Save</button>
+</form>
+{% endblock %}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Interior Design Platform{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('login.index') }}">Interior Design Platform</a>
+    {% if g.user %}
+    <nav class="menu">
+      <a href="{{ url_for('login.displayHome') }}">Home</a>
+      <a href="{{ url_for('browse_idp.displayBrowsePage') }}">Browse Projects</a>
+      {% for label, endpoint in menu_items %}
+        <a href="{{ url_for(endpoint) }}">{{ label }}</a>
+      {% endfor %}
+    </nav>
+    <div class="who">
+      <span>{{ g.user.name }} <small>({{ g.user.profileName }})</small></span>
+      <a class="btn btn-small" href="{{ url_for('login.clickLogout') }}">Logout</a>
+    </div>
+    {% else %}
+    <nav class="menu">
+      <a href="{{ url_for('browse_idp.displayBrowsePage') }}">Browse Projects</a>
+    </nav>
+    <div class="who">
+      <a class="btn btn-small" href="{{ url_for('login.displayLoginForm') }}">Login</a>
+      <a class="btn btn-small btn-light" href="{{ url_for('sign_up.displaySignUpForm') }}">Sign Up</a>
+    </div>
+    {% endif %}
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

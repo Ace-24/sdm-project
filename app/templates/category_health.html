@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Category Health{% endblock %}
+{% block content %}
+<h1>Category Health Report</h1>
+<p class="muted">Health score (0-100) = 40% number of active IDPs + 40% customer interest (views and favourites in the
+  last {{ days }} days) + 20% growth in new IDPs vs the previous {{ days }} days. Each measure is scaled against the
+  highest category. Below 40 = At Risk.</p>
+<table>
+  <tr><th>Category</th><th>Status</th><th>Active IDPs</th><th>Interest ({{ days }}d)</th><th>Growth</th>
+      <th>Health score</th><th></th><th></th></tr>
+  {% for h in results %}
+  <tr>
+    <td>{{ h.categoryName }}</td><td>{{ h.categoryStatus }}</td><td>{{ h.idpCount }}</td><td>{{ h.interestCount }}</td>
+    <td>{{ '%+.0f'|format(h.growthRate) }}%</td>
+    <td><div class="bar"><span style="width:{{ h.healthScore }}%"></span></div> <strong>{{ '%.1f'|format(h.healthScore) }}</strong></td>
+    <td><span class="badge {{ 'badge-risk' if h.healthStatus == 'At Risk' else 'badge-ok' if h.healthStatus == 'Doing Well' else 'badge-warn' }}">{{ h.healthStatus }}</span></td>
+    <td>{% if h.categoryStatus == 'Active' %}
+      <form method="post" action="{{ url_for('category_health.flagCategory', categoryID=h.categoryID) }}"
+            onsubmit="return confirm('Flag {{ h.categoryName }} for review?');" style="margin:0">
+        <button class="btn btn-secondary btn-tiny" type="submit">Flag for Review</button></form>{% endif %}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Edit Categories{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('manage_portfolio.displayPortfolio') }}">&larr; Back to portfolio</a></p>
+<h1>Edit Categories</h1>
+<p class="muted">{{ idp.title }}</p>
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+<form method="post" class="card">
+  <p>Tick 1 to 5 categories. Customers interested in these categories will see this project on their home page.</p>
+  <div class="check-grid">
+    {% for c in categories %}
+    <label class="check"><input type="checkbox" name="category_id" value="{{ c.categoryID }}"
+      {% if c.categoryID in selected %}checked{% endif %}> {{ c.categoryName }}</label>
+    {% endfor %}
+  </div>
+  <button class="btn" type="submit">Save</button>
+  <a class="btn btn-secondary" href="{{ url_for('manage_portfolio.displayPortfolio') }}">Cancel</a>
+</form>
+<details class="card">
+  <summary><strong>Can't find a suitable category? Request a new one</strong></summary>
+  <form method="post" action="{{ url_for('manage_project_categories.clickRequestCategory', idpID=idp.idpID) }}" style="margin-top:12px;max-width:480px">
+    <label>Category name <input name="name" required></label>
+    <label>Reason <textarea name="reason" rows="2" required></textarea></label>
+    <button class="btn" type="submit">Send request</button>
+  </form>
+</details>
+{% endblock %}

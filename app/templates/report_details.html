@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Report #{{ report.reportID }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('manage_reports.displayReportList') }}">&larr; Back to reports</a></p>
+<h1>Report #{{ report.reportID }}</h1>
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+  <div class="card">
+    <h2>Report</h2>
+    <table>
+      <tr><th>Reason</th><td>{{ report.reason }}</td></tr>
+      <tr><th>Description</th><td>{{ report.description or '-' }}</td></tr>
+      <tr><th>Reported by</th><td>{{ report.reporterName }}</td></tr>
+      <tr><th>Report date</th><td>{{ report.reportedDate }}</td></tr>
+      <tr><th>Evidence</th><td>{{ report.evidenceURLs|join(', ') if report.evidenceURLs else 'None attached' }}</td></tr>
+      <tr><th>Status</th><td>{{ report.status }}{% if report.decision %} ({{ report.decision }}){% endif %}</td></tr>
+    </table>
+  </div>
+  <div class="card idp-card">
+    <h2 style="margin-top:0">Reported IDP</h2>
+    {% include "_idp_cover.html" %}
+    <h2>{{ idp.title }}</h2>
+    <p class="muted">{{ idp.designerName }} &middot; {{ idp.style or '-' }} &middot; Status: {{ idp.status }}</p>
+    <p>{{ idp.description }}</p>
+  </div>
+</div>
+{% if report.status == 'Pending' %}
+<form method="post" class="card" style="max-width:480px">
+  <label>Decision
+    <select name="decision" required>
+      <option value="">-- Select a decision --</option>
+      {% for d in decisions %}<option>{{ d }}</option>{% endfor %}
+    </select></label>
+  <p class="muted">Hide IDP: customers can no longer see it. Warn: the designer receives a warning.
+    Dismiss: no violation or not enough evidence.</p>
+  <button class="btn" type="submit">Submit Decision</button>
+</form>
+{% endif %}
+{% endblock %}

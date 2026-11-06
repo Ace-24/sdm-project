@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}My Interests{% endblock %}
+{% block content %}
+{% if welcome %}
+<div class="flash flash-success">Welcome, {{ g.user.name }}! Your account has been created.</div>
+<h1>What kind of designs do you like?</h1>
+<p class="muted">Choose up to {{ maximum }} categories. We will show projects from them on your home page.</p>
+{% else %}
+<h1>My Interests</h1>
+<p class="muted">The categories shown on your home page. Choose 1 to {{ maximum }}.</p>
+{% endif %}
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+<form method="post" class="card">
+  <input type="hidden" name="welcome" value="{{ '1' if welcome else '' }}">
+  <div class="check-grid">
+    {% for c in categories %}
+    <label class="check"><input type="checkbox" name="category_id" value="{{ c.categoryID }}"
+      {% if c.categoryID in selected %}checked{% endif %}> {{ c.categoryName }}</label>
+    {% endfor %}
+  </div>
+  <button class="btn" type="submit">{{ 'Show my projects' if welcome else 'Save' }}</button>
+  <a class="btn btn-secondary" href="{{ url_for('login.displayHome') }}">{{ 'Skip for now' if welcome else 'Cancel' }}</a>
+</form>
+{% endblock %}

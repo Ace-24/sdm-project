@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Manage Portfolio{% endblock %}
+{% block content %}
+<h1>{{ 'Archived Projects' if archived else 'Manage Portfolio' }}</h1>
+<p>
+  {% if archived %}
+    <a href="{{ url_for('manage_portfolio.displayPortfolio') }}">&larr; Back to active projects</a>
+    <span class="muted"> &middot; Archived projects are hidden from customers but not deleted.</span>
+  {% else %}
+    <a class="btn" href="{{ url_for('manage_portfolio.displayAddProjectForm') }}">+ Add Project</a>
+    <a class="btn btn-secondary" href="{{ url_for('manage_portfolio.viewArchivedIDPs') }}">View Archived</a>
+  {% endif %}
+</p>
+{% if not idps %}
+  <p class="muted">{{ 'No archived projects.' if archived else 'You have no active projects.' }}</p>
+{% endif %}
+<div class="idp-grid">
+{% for idp in idps %}
+  <div class="card idp-card">
+    {% include "_idp_cover.html" %}
+    <h2><a href="{{ url_for('view_idp.displayIDPPage', idpID=idp.idpID) }}">{{ idp.title }}</a></h2>
+    <p class="muted">{{ idp.style or 'No category' }} &middot; {{ idp.propertyType }}</p>
+    {% set c = counts.get(idp.idpID, (0, 0)) %}
+    <p class="stats"><span>Views: <strong>{{ c[0] }}</strong></span> <span>Shortlisted: <strong>{{ c[1] }}</strong></span></p>
+    {% if archived %}
+      <p class="muted">Archived on {{ idp.archivedDate[:10] }}</p>
+    {% else %}
+      <p class="muted">Completed {{ idp.completionDate }} &middot; S${{ '{:,.0f}'.format(idp.totalCost) }} &middot; {{ idp.floorArea }} sqm</p>
+      {% if idp.status == 'Hidden' %}<p><span class="badge badge-warn">Hidden by Platform Manager</span></p>{% endif %}
+    {% endif %}
+    <div class="actions">
+      {% if archived %}
+        <form method="post" action="{{ url_for('manage_portfolio.clickRestore', idpID=idp.idpID) }}">
+          <button class="btn" type="submit">Restore</button></form>
+      {% else %}
+        <a class="btn" href="{{ url_for('manage_portfolio.selectIDP', idpID=idp.idpID) }}">Edit</a>
+        <a class="btn btn-secondary" href="{{ url_for('manage_project_categories.displayCategoryForm', idpID=idp.idpID) }}">Edit Categories</a>
+        {% if idp.status == 'Active' %}
+        <form method="post" action="{{ url_for('manage_portfolio.clickArchive', idpID=idp.idpID) }}"
+              onsubmit="return confirm('Archive this project? Customers will no longer see it.');">
+          <button class="btn btn-secondary" type="submit">Archive</button></form>
+        {% endif %}
+      {% endif %}
+      <form method="post" action="{{ url_for('manage_portfolio.clickDelete', idpID=idp.idpID) }}"
+            onsubmit="return confirm('Permanently delete this project? This cannot be undone.');">
+        <input type="hidden" name="back" value="{{ 'archived' if archived else '' }}">
+        <button class="btn btn-danger" type="submit">Delete</button></form>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endblock %}

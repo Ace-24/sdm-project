@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Cost Breakdown{% endblock %}
+{% block content %}
+<h1>Generate Cost Breakdown</h1>
+<p class="muted">Enter a quantity for each item you need (leave the rest blank). Prices use the platform's current
+  estimation rates and include 9% GST. This is an estimate only; your designer will give you an exact quotation.</p>
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+<form method="post">
+  <div class="card" style="display:flex;gap:12px;flex-wrap:wrap">
+    <label style="flex:1;min-width:200px">Property type
+      <select name="property_type" required>
+        <option value="">-- Select --</option>
+        {% for p in property_types %}<option {% if form.get('property_type') == p %}selected{% endif %}>{{ p }}</option>{% endfor %}
+      </select></label>
+    <label style="flex:1;min-width:200px">Design style
+      <select name="style">
+        <option value="">Standard (no style adjustment)</option>
+        {% for s in styles %}<option {% if form.get('style') == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+      </select></label>
+  </div>
+  <table>
+    <tr><th>Item</th><th>Unit</th><th>Unit rate (S$)</th><th>Quantity</th></tr>
+    {% for r in items %}
+    <tr><td>{{ r.itemName }}</td><td>{{ r.unit }}</td><td>{{ '%.2f'|format(r.rate) }}</td>
+        <td><input name="qty:{{ r.itemCode }}" type="number" step="any" min="0" value="{{ form.get('qty:' ~ r.itemCode, '') }}" style="max-width:120px"></td></tr>
+    {% endfor %}
+  </table>
+  <p><button class="btn" type="submit">Generate</button></p>
+</form>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Compare Favourites{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('compare_favourites.displayFavourites') }}">&larr; Back to my favourites</a></p>
+<h1>Compare Favourite IDPs</h1>
+<div class="compare-grid" style="grid-template-columns: repeat({{ comparison.idps|length }}, 1fr)">
+  {% for idp in comparison.idps %}
+  <div class="card idp-card {% if idp.idpID == comparison.bestValueID %}best{% endif %}">
+    {% if idp.idpID == comparison.bestValueID %}<div class="badge badge-best">Best value</div>{% endif %}
+    {% include "_idp_cover.html" %}
+    <h2><a href="{{ url_for('view_idp.displayIDPPage', idpID=idp.idpID) }}">{{ idp.title }}</a></h2>
+    <p class="muted">{{ idp.designerName }}</p>
+    <table>
+      <tr><th>Total cost</th><td>S${{ '{:,.2f}'.format(idp.totalCost) }}</td></tr>
+      <tr><th>Floor area</th><td>{{ idp.floorArea }} sqm</td></tr>
+      <tr><th>Cost per sqm</th><td><strong>S${{ '{:,.2f}'.format(idp.getCostPerSqm()) }}</strong></td></tr>
+      <tr><th>Style</th><td>{{ idp.style or '-' }}</td></tr>
+      <tr><th>Property type</th><td>{{ idp.propertyType }}</td></tr>
+    </table>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

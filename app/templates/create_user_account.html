@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Create User Account{% endblock %}
+{% block content %}
+<h1>Create User Account</h1>
+{% if errors %}
+<div class="flash flash-error">
+  <strong>Please fix the following:</strong>
+  <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+<form method="post" class="card" style="max-width:560px">
+  <label>Username <input name="username" value="{{ form.get('username', '') }}" required></label>
+  <label>Password <input name="password" type="password" required>
+    <small class="muted">At least 8 characters, with an uppercase letter, a lowercase letter and a number.</small></label>
+  <label>Name <input name="name" value="{{ form.get('name', '') }}" required></label>
+  <label>Email <input name="email" type="email" value="{{ form.get('email', '') }}" required></label>
+  <label>Phone number <input name="phone_no" value="{{ form.get('phone_no', '') }}" placeholder="e.g. 91234567" required></label>
+  <label>User profile
+    <select name="profile_id" required>
+      <option value="">-- Select a profile --</option>
+      {% for p in profiles %}
+        <option value="{{ p.profileID }}" {% if form.get('profile_id') == p.profileID|string %}selected{% endif %}>{{ p.profileName }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label style="font-weight:400"><input type="checkbox" name="email_credentials" style="display:inline;width:auto"
+    {% if form.get('email_credentials') %}checked{% endif %}> Email login credentials to the new user</label>
+  <button class="btn" type="submit">Submit</button>
+  <a class="btn btn-secondary" href="{{ url_for('login.displayHome') }}">Cancel</a>
+</form>
+{% endblock %}

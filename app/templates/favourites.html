@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}My Favourites{% endblock %}
+{% block content %}
+<h1>My Favourites</h1>
+<p class="muted">Tick 2 or 3 projects and click Compare to see which one offers the best value.</p>
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+{% if not favourites %}
+  <p class="muted">Your favourites list is empty.</p>
+{% else %}
+<form method="post" action="{{ url_for('compare_favourites.clickCompare') }}">
+  <table>
+    <tr><th></th><th>Project</th><th>Designer</th><th>Style</th><th>Total cost</th><th>Saved</th></tr>
+    {% for f in favourites %}{% set i = f.idp %}
+    <tr {% if not i.isComparable() %}class="muted"{% endif %}>
+      <td><input type="checkbox" name="idp_id" value="{{ i.idpID }}" style="width:auto"
+           {% if i.idpID in selected %}checked{% endif %}></td>
+      <td><a href="{{ url_for('view_idp.displayIDPPage', idpID=i.idpID) }}">{{ i.title }}</a>{% if i.status != 'Active' %} <span class="badge badge-warn">No longer available</span>{% endif %}</td>
+      <td>{{ i.designerName }}</td><td>{{ i.style or '-' }}</td>
+      <td>S${{ '{:,.0f}'.format(i.totalCost) }}</td><td>{{ f.savedDate[:10] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p><button class="btn" type="submit">Compare</button></p>
+</form>
+{% endif %}
+{% endblock %}

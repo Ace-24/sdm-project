@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Estimation Rules{% endblock %}
+{% block content %}
+<h1>Create Cost Estimation Rules</h1>
+{% if rule %}
+<p class="muted">Current active rule: <strong>{{ rule.ruleName }}</strong> (created {{ rule.createdDate[:10] }}).
+  The values below start from this rule. Saving creates a new rule and makes it active.</p>
+{% else %}<p class="muted">There is no active rule yet.</p>{% endif %}
+{% if errors %}
+<div class="flash flash-error"><strong>Please fix the following:</strong>
+  <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>
+{% endif %}
+{% macro val(key, current) -%}{{ entered[key] if entered is not none and key in entered else current }}{%- endmacro %}
+<form method="post">
+  <div class="card">
+    <label style="max-width:420px">New rule name <input name="rule_name" value="{{ val('rule_name', '') }}"
+      placeholder="e.g. 2027 Q1 rates" required></label>
+  </div>
+  <div class="card">
+    <h2>Unit rates (SGD)</h2>
+    <table>
+      <tr><th>Code</th><th>Item</th><th>Unit</th><th>Current rate</th><th>New rate</th></tr>
+      {% for r in rule.unitRates if rule %}
+      <tr><td>{{ r.itemCode }}</td><td>{{ r.itemName }}</td><td>{{ r.unit }}</td><td>{{ '%.2f'|format(r.rate) }}</td>
+          <td><input name="rate:{{ r.itemCode }}" type="number" step="0.01" value="{{ val('rate:' ~ r.itemCode, r.rate) }}" style="max-width:140px"></td></tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="card">
+    <h2>Property type multipliers <small class="muted">(0.5 to 3.0)</small></h2>
+    <div class="check-grid">
+      {% for p in property_types %}
+      <label>{{ p }} <input name="prop:{{ p }}" type="number" step="0.01"
+        value="{{ val('prop:' ~ p, rule.getPropertyFactor(p) if rule else 1.0) }}"></label>
+      {% endfor %}
+    </div>
+    <h2>Style multipliers <small class="muted">(0.5 to 3.0, blank = 1.0)</small></h2>
+    <div class="check-grid">
+      {% for s in styles %}
+      <label>{{ s }} <input name="style:{{ s }}" type="number" step="0.01"
+        value="{{ val('style:' ~ s, rule.getStyleFactor(s) if rule else 1.0) }}"></label>
+      {% endfor %}
+    </div>
+  </div>
+  <button class="btn" type="submit">Save</button>
+  <a class="btn btn-secondary" href="{{ url_for('login.displayHome') }}">Cancel</a>
+</form>
+{% endblock %}

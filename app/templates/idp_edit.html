@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Add Project' if new else 'Edit Project' }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('manage_portfolio.displayPortfolio') }}">&larr; Back to portfolio</a></p>
+<h1>{{ 'Add Project' if new else 'Edit Project' }}</h1>
+{% if errors %}
+<div class="flash flash-error"><strong>Please fix the following:</strong>
+  <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>
+{% endif %}
+<form method="post" enctype="multipart/form-data" class="card" style="max-width:860px">
+  <label>Title <input name="title" value="{{ idp.title or '' }}" required></label>
+  <label>Description <textarea name="description" rows="4" required>{{ idp.description or '' }}</textarea></label>
+  <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <label style="flex:1;min-width:180px">Property type
+      <select name="property_type" required>
+        <option value="">-- Select --</option>
+        {% for t in property_types %}<option {% if idp.propertyType == t %}selected{% endif %}>{{ t }}</option>{% endfor %}
+      </select></label>
+    <label style="flex:1;min-width:140px">Floor area (sqm) <input name="floor_area" type="number" step="0.1" min="0" value="{{ idp.floorArea if idp.floorArea else '' }}" required></label>
+    <label style="flex:1;min-width:160px">Completion date <input name="completion_date" type="date" value="{{ idp.completionDate or '' }}" required></label>
+  </div>
+
+  <h2>Cost breakdown</h2>
+  <p class="muted">Enter your own unit rates for this project's property type. The project's total cost is the sum of
+    these lines. Customers can view the breakdown for other property types; the website adjusts it with the property multiplier.</p>
+  <datalist id="item-names">{% for n in item_names %}<option value="{{ n }}">{% endfor %}</datalist>
+  <table id="cost-table">
+    <tr><th>Item</th><th>Unit</th><th>Quantity</th><th>Unit rate (S$)</th><th>Cost (S$)</th><th></th></tr>
+    {% set blank = [none, none, none] %}
+    {% for i in items %}
+    <tr class="cost-row">
+      <td><input name="item_name" list="item-names" value="{{ i.itemName or '' }}"></td>
+      <td><select name="unit">{% for u in units %}<option {% if i.unit == u %}selected{% endif %}>{{ u }}</option>{% endfor %}</select></td>
+      <td><input name="quantity" type="number" step="any" value="{{ i.quantity if i.quantity is not none else '' }}"></td>
+      <td><input name="unit_rate" type="number" step="0.01" value="{{ i.unitRate if i.unitRate is not none else '' }}"></td>
+      <td class="line">{{ '{:,.2f}'.format(i.quantity * i.unitRate) if i.quantity and i.unitRate else '' }}</td>
+      <td><button type="button" class="btn btn-secondary btn-tiny" onclick="removeRow(this)">Remove</button></td>
+    </tr>
+    {% endfor %}
+    {% for _ in range(3 if not items else 1) %}
+    <tr class="cost-row">
+      <td><input name="item_name" list="item-names" placeholder="e.g. Vinyl flooring"></td>
+      <td><select name="unit">{% for u in units %}<option>{{ u }}</option>{% endfor %}</select></td>
+      <td><input name="quantity" type="number" step="any"></td>
+      <td><input name="unit_rate" type="number" step="0.01"></td>
+      <td class="line"></td>
+      <td><button type="button" class="btn btn-secondary btn-tiny" onclick="removeRow(this)">Remove</button></td>
+    </tr>
+    {% endfor %}
+    <tr><th colspan="4" style="text-align:right">Total cost (before GST)</th><td colspan="2"><strong id="cost-total"></strong></td></tr>
+  </table>
+  <p><button type="button" class="btn btn-secondary" onclick="addRow()">+ Add item</button></p>
+
+  {% if not new %}
+  <p><strong>Style categories:</strong> {{ idp.style or 'None' }}
+     (<a href="{{ url_for('manage_project_categories.displayCategoryForm', idpID=idp.idpID) }}">Edit Categories</a>)</p>
+  {% endif %}
+  {% if idp.photoURLs %}
+  <p><strong>Current photos</strong> <span class="muted">(tick to remove)</span></p>
+  <div class="photos">
+    {% for p in idp.photoURLs %}
+    <label class="photo"><img src="{{ url_for('static', filename='uploads/' ~ p) }}" alt="">
+      <span><input type="checkbox" name="remove_photo" value="{{ p }}" style="display:inline;width:auto"> Remove</span></label>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <label>Add photos <input type="file" name="photos" accept=".jpg,.jpeg,.png" multiple>
+    <small class="muted">JPG or PNG, under 5 MB each.</small></label>
+  <button class="btn" type="submit">{{ 'Add Project' if new else 'Save' }}</button>
+  <a class="btn btn-secondary" href="{{ url_for('manage_portfolio.displayPortfolio') }}">Cancel</a>
+</form>
+<script>
+function recalc() {
+  let total = 0;
+  document.querySelectorAll('#cost-table .cost-row').forEach(function (row) {
+    const q = parseFloat(row.querySelector('[name=quantity]').value), r = parseFloat(row.querySelector('[name=unit_rate]').value);
+    const cell = row.querySelector('.line');
+    if (q > 0 && r > 0) { cell.textContent = (q * r).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}); total += q * r; }
+    else { cell.textContent = ''; }
+  });
+  document.getElementById('cost-total').textContent = 'S$' + total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+}
+function addRow() {
+  const rows = document.querySelectorAll('#cost-table .cost-row');
+  const copy = rows[rows.length - 1].cloneNode(true);
+  copy.querySelectorAll('input').forEach(function (i) { i.value = ''; });
+  copy.querySelector('.line').textContent = '';
+  rows[rows.length - 1].after(copy);
+}
+function removeRow(btn) {
+  const rows = document.querySelectorAll('#cost-table .cost-row');
+  const row = btn.closest('tr');
+  if (rows.length > 1) { row.remove(); } else { row.querySelectorAll('input').forEach(function (i) { i.value = ''; }); }
+  recalc();
+}
+document.getElementById('cost-table').addEventListener('input', recalc);
+recalc();
+</script>
+{% endblock %}

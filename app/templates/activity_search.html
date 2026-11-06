@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}View Activity Log{% endblock %}
+{% block content %}
+<h1>Accounts &amp; Activity Log</h1>
+<form method="get" class="card" style="display:flex;flex-wrap:wrap;gap:10px;align-items:end">
+  <label style="flex:2;min-width:220px;margin:0">Search by username, name or email
+    <input name="keyword" value="{{ keyword }}" placeholder="part of a name is enough, e.g. tan"></label>
+  <label style="flex:1;min-width:170px;margin:0">Role
+    <select name="role"><option value="">All roles</option>
+      {% for r in roles %}<option {% if r == role %}selected{% endif %}>{{ r }}</option>{% endfor %}</select></label>
+  <button class="btn" type="submit">Search</button>
+  {% if keyword or role %}<a class="btn btn-secondary" href="{{ url_for('view_activity_log.searchAccount') }}">Show all</a>{% endif %}
+</form>
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+{% if accounts %}
+<p class="muted">{{ accounts|length }} {{ 'current account(s)' if not keyword and not role else 'account(s) found' }}.</p>
+<table>
+  <tr><th>Username</th><th>Name</th><th>Email</th><th>Profile</th><th>Status</th><th></th></tr>
+  {% for a in accounts %}
+  <tr>
+    <td>{{ a.username }}</td><td>{{ a.name }}</td><td>{{ a.email }}</td><td>{{ a.profileName }}</td>
+    <td>{{ a.status }}</td>
+    <td class="actions" style="margin:0"><a class="btn btn-tiny" href="{{ url_for('view_activity_log.displayActivityLog', accountID=a.accountID) }}">Activity Log</a>
+      <a class="btn btn-secondary btn-tiny" href="{{ url_for('edit_user_account.displayEditForm', accountID=a.accountID) }}">Edit</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

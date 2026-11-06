@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Account Created{% endblock %}
+{% block content %}
+<div class="card" style="max-width:560px">
+  <div class="flash flash-success">Account created successfully</div>
+  <table>
+    <tr><th>Username</th><td>{{ account.username }}</td></tr>
+    <tr><th>Name</th><td>{{ account.name }}</td></tr>
+    <tr><th>Email</th><td>{{ account.email }}</td></tr>
+    <tr><th>Phone</th><td>{{ account.phoneNo }}</td></tr>
+    <tr><th>Status</th><td>{{ account.status }}</td></tr>
+  </table>
+  {% if emailed %}<p class="muted">Login credentials were sent to the new user.</p>{% endif %}
+  <p><a class="btn" href="{{ url_for('create_user_account.displayCreateUAForm') }}">Create another account</a></p>
+</div>
+{% endblock %}

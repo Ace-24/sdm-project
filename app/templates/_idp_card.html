@@ -1,0 +1,7 @@
+<a class="card idp-card idp-link" href="{{ url_for('view_idp.displayIDPPage', idpID=idp.idpID) }}">
+  {% include "_idp_cover.html" %}
+  <h2>{{ idp.title }}</h2>
+  <p class="muted">{{ idp.style or '-' }}</p>
+  <p class="muted">{{ idp.designerName }}</p>
+  <p><strong>S${{ '{:,.0f}'.format(idp.totalCost) }}</strong> <span class="muted">&middot; {{ idp.floorArea }} sqm &middot; {{ idp.propertyType }}</span></p>
+</a>

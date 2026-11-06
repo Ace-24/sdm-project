@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Sales Reports{% endblock %}
+{% block content %}
+<h1>Export Sales Report</h1>
+<p class="muted">Downloads a CSV with one row per day: cost estimates made by customers, their total and average
+  value (SGD), IDP views and shortlists, followed by a totals row.</p>
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+<form method="post" action="{{ url_for('sales_report.clickExport') }}" class="card" style="max-width:480px">
+  <label>Period type
+    <select name="period_type">
+      {% for p in period_types %}<option {% if p == period %}selected{% endif %}>{{ p }}</option>{% endfor %}
+    </select></label>
+  <label>Date <input type="date" name="ref_date" value="{{ ref_date }}" max="{{ today }}">
+    <small class="muted">Weekly = Monday to Sunday of that week. Monthly = the whole month.</small></label>
+  <button class="btn" type="submit">Export CSV</button>
+</form>
+{% endblock %}

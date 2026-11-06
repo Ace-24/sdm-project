@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Login - Interior Design Platform{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h1>Login</h1>
+  {% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+  <form method="post">
+    <label>Username <input name="username" autofocus required></label>
+    <label>Password <input name="password" type="password" required></label>
+    <button class="btn" type="submit">Login</button>
+  </form>
+  <p class="muted" style="margin-top:14px">New here? <a href="{{ url_for('sign_up.displaySignUpForm') }}">Create a customer account</a>
+    or <a href="{{ url_for('browse_idp.displayBrowsePage') }}">browse projects</a> without logging in.</p>
+</div>
+{% endblock %}

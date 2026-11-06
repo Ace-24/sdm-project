@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Edit Category{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('manage_categories.displayCategoryList') }}">&larr; Back to categories</a></p>
+<h1>Edit Category</h1>
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+<form method="post" class="card" style="max-width:520px">
+  <label>Name <input name="name" value="{{ category.categoryName }}" required></label>
+  <label>Description <input name="description" value="{{ category.description or '' }}"></label>
+  <label>Status
+    <select name="status">{% for s in statuses %}<option {% if s == category.status %}selected{% endif %}>{{ s }}</option>{% endfor %}</select>
+    <small class="muted">Inactive categories can't be chosen by designers or customers.</small></label>
+  <button class="btn" type="submit">Save</button>
+  <a class="btn btn-secondary" href="{{ url_for('manage_categories.displayCategoryList') }}">Cancel</a>
+</form>
+{% endblock %}

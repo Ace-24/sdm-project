@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Manage Categories{% endblock %}
+{% block content %}
+<h1>Manage Categories</h1>
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+<form method="post" class="card" style="display:flex;flex-wrap:wrap;gap:10px;align-items:end">
+  <label style="flex:1;min-width:180px;margin:0">New category name <input name="name" value="{{ form.get('name', '') }}" required></label>
+  <label style="flex:2;min-width:240px;margin:0">Description <input name="description" value="{{ form.get('description', '') }}"></label>
+  <button class="btn" type="submit">Create category</button>
+</form>
+{% if requests %}
+<details class="card" open>
+  <summary><strong>Category requests from designers ({{ requests|length }})</strong></summary>
+  <ul>{% for r in requests %}<li><strong>{{ r.subject[22:] }}</strong> &middot; <span class="muted">{{ r.createdDate[:10] }}</span><br>{{ r.message }}</li>{% endfor %}</ul>
+</details>
+{% endif %}
+<table>
+  <tr><th>Category</th><th>Description</th><th>Status</th><th>Projects</th><th></th></tr>
+  {% for c in categories %}
+  <tr>
+    <td><strong>{{ c.categoryName }}</strong></td><td>{{ c.description or '' }}</td>
+    <td><span class="badge {{ 'badge-ok' if c.status == 'Active' else 'badge-warn' if c.status == 'Under Review' else 'badge-risk' }}">{{ c.status }}</span></td>
+    <td>{{ c.projectCount }}</td>
+    <td class="actions" style="margin:0">
+      <a class="btn btn-secondary btn-tiny" href="{{ url_for('manage_categories.displayEditForm', categoryID=c.categoryID) }}">Edit</a>
+      {% if c.projectCount == 0 %}
+      <form method="post" action="{{ url_for('manage_categories.clickDelete', categoryID=c.categoryID) }}"
+            onsubmit="return confirm('Delete {{ c.categoryName }}?');"><button class="btn btn-danger btn-tiny" type="submit">Delete</button></form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Browse Projects{% endblock %}
+{% block content %}
+<h1>Browse Interior Design Projects</h1>
+<form method="get" class="card" style="display:flex;flex-wrap:wrap;gap:10px;align-items:end">
+  <label style="flex:2;min-width:220px;margin:0">Search
+    <input name="q" value="{{ keyword }}" placeholder="e.g. kitchen, Japandi, condo, designer name"></label>
+  <label style="flex:1;min-width:180px;margin:0">Category
+    <select name="category">
+      <option value="">All categories</option>
+      {% for c in categories %}<option value="{{ c.categoryID }}" {% if c.categoryID == category_id %}selected{% endif %}>{{ c.categoryName }}</option>{% endfor %}
+    </select></label>
+  <button class="btn" type="submit">Search</button>
+  {% if keyword or category_id %}<a class="btn btn-secondary" href="{{ url_for('browse_idp.displayBrowsePage') }}">Clear</a>{% endif %}
+</form>
+<p class="muted">{{ total }} project(s) found.{% if not g.user %} <a href="{{ url_for('sign_up.displaySignUpForm') }}">Sign up</a> to save favourites and get cost estimates.{% endif %}</p>
+{% if not idps %}<p class="muted">No projects match your search.</p>{% endif %}
+<div class="idp-grid">
+  {% for idp in idps %}{% include "_idp_card.html" %}{% endfor %}
+</div>
+{% if pages > 1 %}
+<div class="pager">
+  {% if page > 1 %}<a class="btn btn-secondary" href="{{ url_for('browse_idp.displayBrowsePage', q=keyword, category=category_id or '', page=page-1) }}">&larr; Previous</a>{% endif %}
+  <span class="muted">Page {{ page }} of {{ pages }}</span>
+  {% if page < pages %}<a class="btn btn-secondary" href="{{ url_for('browse_idp.displayBrowsePage', q=keyword, category=category_id or '', page=page+1) }}">Next &rarr;</a>{% endif %}
+</div>
+{% endif %}
+{% endblock %}

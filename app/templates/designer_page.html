@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ cp.companyName if cp else designer.name }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('browse_idp.displayBrowsePage') }}">&larr; Browse projects</a></p>
+<div class="card">
+  <h1>{{ cp.companyName if cp else designer.name }}</h1>
+  <p class="muted">Interior designer: {{ designer.name }}</p>
+  {% if cp %}
+  <p>{{ cp.description }}</p>
+  <table style="max-width:640px">
+    {% if cp.address %}<tr><th>Address</th><td>{{ cp.address }}</td></tr>{% endif %}
+    <tr><th>Phone</th><td>{{ cp.phone }}</td></tr>
+    <tr><th>Email</th><td>{{ cp.email }}</td></tr>
+    {% if cp.website %}<tr><th>Website</th><td>{{ cp.website }}</td></tr>{% endif %}
+    {% if cp.uen %}<tr><th>UEN</th><td>{{ cp.uen }}</td></tr>{% endif %}
+  </table>
+  {% else %}<p class="muted">This designer has not added company information yet.</p>{% endif %}
+</div>
+<h2>Projects ({{ idps|length }})</h2>
+<div class="idp-grid">{% for idp in idps %}{% include "_idp_card.html" %}{% endfor %}</div>
+{% endblock %}

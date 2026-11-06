@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Manage Reports{% endblock %}
+{% block content %}
+<h1>Manage Reports on Inappropriate IDPs</h1>
+{% if not reports %}
+  <div class="flash flash-success">No pending reports</div>
+{% else %}
+<p class="muted">{{ reports|length }} pending report(s), oldest first.</p>
+<table>
+  <tr><th>Report ID</th><th>Reported IDP</th><th>Reason</th><th>Reported by</th><th>Report date</th><th></th></tr>
+  {% for r in reports %}
+  <tr><td>#{{ r.reportID }}</td><td>{{ r.idpTitle }}</td><td>{{ r.reason }}</td><td>{{ r.reporterName }}</td>
+      <td>{{ r.reportedDate[:10] }}</td>
+      <td><a class="btn" href="{{ url_for('manage_reports.selectReport', reportID=r.reportID) }}">Review</a></td></tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,43 @@
+# CI/CD for the Interior Design Platform
+#  - CI: every push and pull request runs the unit tests on two Python versions
+#        and checks that the test data generator still works.
+#  - CD: when the tests pass on the main branch, the app is deployed to Render
+#        (only if the RENDER_DEPLOY_HOOK_URL secret has been added in GitHub).
+name: CI/CD
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run unit tests
+        run: python -m pytest -v
+      - name: Check the test data generator
+        run: SDM_DB_PATH=/tmp/ci.db python scripts/generate_test_data.py
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Render
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "RENDER_DEPLOY_HOOK_URL secret not set - skipping deployment."
+          else
+            curl -fsS -X POST "$HOOK" && echo "Deployment to Render started."
+          fi

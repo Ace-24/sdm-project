@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Edit Account - {{ original.username }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('view_activity_log.displayActivityLog', accountID=original.accountID) }}">&larr; Back to account</a></p>
+<h1>Edit User Account: {{ original.username }}</h1>
+<p class="muted">Status: <strong>{{ original.status }}</strong> &middot; created {{ original.createdDate[:10] }}</p>
+{% if errors %}
+<div class="flash flash-error"><strong>Please fix the following:</strong>
+  <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>
+{% endif %}
+<form method="post" class="card" style="max-width:560px">
+  <label>Username <input name="username" value="{{ account.username }}" required></label>
+  <label>Name <input name="name" value="{{ account.name }}" required></label>
+  <label>Email <input name="email" type="email" value="{{ account.email }}" required></label>
+  <label>Phone number <input name="phone_no" value="{{ account.phoneNo }}" required></label>
+  <label>User profile
+    <select name="profile_id" required>
+      {% for p in profiles %}<option value="{{ p.profileID }}" {% if p.profileID == account.profileID %}selected{% endif %}>{{ p.profileName }}</option>{% endfor %}
+    </select></label>
+  <label>New password <input name="new_password" type="password" autocomplete="new-password">
+    <small class="muted">Leave blank to keep the current password.</small></label>
+  <button class="btn" type="submit">Save</button>
+  <a class="btn btn-secondary" href="{{ url_for('view_activity_log.displayActivityLog', accountID=original.accountID) }}">Cancel</a>
+</form>
+{% endblock %}

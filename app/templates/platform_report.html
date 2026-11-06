@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Platform Reports{% endblock %}
+{% block content %}
+<h1>Platform Reports</h1>
+<form method="get" class="card" style="display:flex;flex-wrap:wrap;gap:10px;align-items:end">
+  <label style="margin:0">Period
+    <select name="period">{% for p in period_types %}<option {% if p == period %}selected{% endif %}>{{ p }}</option>{% endfor %}</select></label>
+  <label style="margin:0">Date <input type="date" name="date" value="{{ ref_date }}" max="{{ today }}"></label>
+  <button class="btn" type="submit">Generate</button>
+</form>
+{% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
+{% if report %}
+<h2>{{ report.periodType }} report: {{ report.startDate }}{% if report.endDate != report.startDate %} to {{ report.endDate }}{% endif %}</h2>
+<div class="tiles">
+  {% for label, value in report.summary.items() %}
+  <div class="tile stat-tile"><span class="muted">{{ label }}</span><strong>{{ value }}</strong></div>
+  {% endfor %}
+</div>
+<h2 style="margin-top:22px">By category</h2>
+<table>
+  <tr><th>Category</th><th>New IDPs</th><th>IDP views</th><th>Shortlisted</th></tr>
+  {% for name, new, views, favs in report.categoryRows %}
+  <tr><td>{{ name }}</td><td>{{ new }}</td><td>{{ views }}</td><td>{{ favs }}</td></tr>
+  {% endfor %}
+</table>
+<form method="post" action="{{ url_for('platform_report.clickExport') }}" style="margin-top:14px">
+  <input type="hidden" name="period" value="{{ report.periodType }}"><input type="hidden" name="date" value="{{ ref_date }}">
+  <button class="btn" type="submit">Export CSV</button>
+</form>
+{% endif %}
+{% endblock %}
