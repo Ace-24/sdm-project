@@ -82,3 +82,5 @@ a.idp-link:hover { border-color: var(--brand); }
 .stat-tile { display: flex; flex-direction: column; gap: 6px; color: var(--text); }
 .stat-tile strong { font-size: 26px; color: var(--brand); }
 td.actions { display: table-cell; } td.actions > * { display: inline-block; margin-right: 4px; }
+.evidence { max-width: 220px; max-height: 160px; border-radius: 6px; border: 1px solid var(--border); }
+.detail-head form { display: flex; gap: 8px; flex-wrap: wrap; }

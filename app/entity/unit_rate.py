@@ -35,3 +35,8 @@ class UnitRate:
         rows = get_db().execute("SELECT * FROM unit_rate WHERE rule_id = ? ORDER BY unit_rate_id",
                                 (ruleID,)).fetchall()
         return [UnitRate._fromRow(r) for r in rows]
+
+    @staticmethod
+    def getAllCodes():
+        """Every item code used by any rule (new items must not reuse one)."""
+        return {r[0] for r in get_db().execute("SELECT DISTINCT item_code FROM unit_rate").fetchall()}

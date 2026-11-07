@@ -17,14 +17,29 @@
       placeholder="e.g. 2027 Q1 rates" required></label>
   </div>
   <div class="card">
-    <h2>Unit rates (SGD)</h2>
-    <table>
-      <tr><th>Code</th><th>Item</th><th>Unit</th><th>Current rate</th><th>New rate</th></tr>
-      {% for r in rule.unitRates if rule %}
-      <tr><td>{{ r.itemCode }}</td><td>{{ r.itemName }}</td><td>{{ r.unit }}</td><td>{{ '%.2f'|format(r.rate) }}</td>
-          <td><input name="rate:{{ r.itemCode }}" type="number" step="0.01" value="{{ val('rate:' ~ r.itemCode, r.rate) }}" style="max-width:140px"></td></tr>
-      {% endfor %}
+    <h2>Renovation items and unit rates (SGD)</h2>
+    <p class="muted">Change an item's name, unit or rate, remove items, or add new ones. Customers' cost
+      breakdowns and designers' item suggestions use this list once the rule is saved.</p>
+    {% macro item_row(it) -%}
+    <tr class="item-row">
+      <td class="muted">{{ it.code or 'new' }}<input type="hidden" name="item_code" value="{{ it.code }}"></td>
+      <td><input name="item_name" value="{{ it.name }}" maxlength="40" placeholder="e.g. Feature wall" aria-label="Item name"></td>
+      <td><select name="item_unit" aria-label="Unit">
+        {% for u in units %}<option value="{{ u }}" {{ 'selected' if u == it.unit }}>{{ u }}</option>{% endfor %}
+      </select></td>
+      <td class="muted">{{ '%.2f'|format(it.current.rate) if it.current else '-' }}</td>
+      <td><input name="item_rate" type="number" step="0.01" min="0" value="{{ it.rate }}" style="max-width:140px" aria-label="Rate"></td>
+      <td><button type="button" class="btn btn-secondary remove-item" style="padding:4px 10px;font-size:13px">Remove</button></td>
+    </tr>
+    {%- endmacro %}
+    <table id="item-table">
+      <thead><tr><th>Code</th><th>Item</th><th>Unit</th><th>Current rate</th><th>New rate</th><th></th></tr></thead>
+      <tbody>
+      {% for it in items %}{{ item_row(it) }}{% endfor %}
+      </tbody>
     </table>
+    <template id="new-item-row">{{ item_row({'code': '', 'name': '', 'unit': units[0], 'rate': '', 'current': none}) }}</template>
+    <p><button type="button" class="btn btn-secondary" id="add-item">+ Add item</button></p>
   </div>
   <div class="card">
     <h2>Property type multipliers <small class="muted">(0.5 to 3.0)</small></h2>
@@ -45,4 +60,16 @@
   <button class="btn" type="submit">Save</button>
   <a class="btn btn-secondary" href="{{ url_for('login.displayHome') }}">Cancel</a>
 </form>
+<script>
+  (function () {
+    var body = document.querySelector('#item-table tbody');
+    document.getElementById('add-item').addEventListener('click', function () {
+      body.appendChild(document.getElementById('new-item-row').content.cloneNode(true));
+      body.lastElementChild.querySelector('input[name=item_name]').focus();
+    });
+    body.addEventListener('click', function (e) {
+      if (e.target.classList.contains('remove-item')) e.target.closest('tr').remove();
+    });
+  })();
+</script>
 {% endblock %}

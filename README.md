@@ -67,6 +67,7 @@ python -m pytest tests/test_us47_create_estimation_rule.py -v   # one story
 | - | Sign up (customers) | nobody | Sign Up (/signup) |
 | - | Choose interests (shown on home page) | customer | after sign-up, or My Interests |
 | - | Save / remove favourites | customer | button on a project page |
+| - | Submit a report on a project (reason, description, photo evidence) | customer | "Report this project" on a project page |
 | - | Login / Logout | anyone | /login |
 | - | Edit user account (incl. password reset), reactivate account | admin | Accounts & Activity Log > Edit / Reactivate |
 | - | Manage user profiles (create, edit, suspend) | admin | User Profiles |
@@ -81,12 +82,16 @@ python -m pytest tests/test_us47_create_estimation_rule.py -v   # one story
 | #29 | Generate Cost Breakdown | customer | Cost Breakdown |
 | #38 | Manage Reports on Inappropriate IDPs | pmanager | Manage Reports |
 | #40 | Category Health Report | pmanager | Category Health |
-| #47 | Create Cost Estimation Rules | smanager | Estimation Rules |
+| #47 | Create Cost Estimation Rules (incl. editing, adding and removing renovation items) | smanager | Estimation Rules |
 | #50 | Export Sales Report | smanager | Sales Reports |
 
 How the stories connect:
 - **#47 -> #29 -> #50**: the Sales Manager's active rule sets the prices and multipliers in the customer's
   cost breakdown; saved breakdowns are counted in the sales report.
+- **Submit Report -> #38**: a customer's report lands in the Platform Manager's Reported IDPs list (with a
+  notification); the decision is sent back to the customer and the designer.
+- **#47 item list -> #29 and #13**: the renovation items in the active rule are the rows of the customer's cost
+  breakdown and the item-name suggestions designers see when entering a project's cost breakdown.
 - **#11 / interests -> customer home page**: a project's categories and the customer's chosen interests decide
   what appears under "Projects you might like".
 - **#13 cost breakdown -> project page**: the designer enters unit rates per project (Edit / Add Project); visitors
@@ -103,7 +108,7 @@ How the stories connect:
 | 1. Manage user accounts and profiles | Login/logout and role access; create account (#1); customer sign-up; list/search accounts and activity log (#7); edit account and reset password; suspend / reactivate account; create, edit and suspend user profiles | Done |
 | 2. ID manages company information | Company information page (name, UEN, address, phone, email, website, description), shown on project pages and a public designer page | Done |
 | 3. ID manages portfolio of IDPs | Add project, edit details + photos + cost breakdown, archive / restore / delete (#13), categories (#11) | Done |
-| 4. Customer searches, views, saves IDPs | Browse and search (public), project page, save/remove favourites, favourites list, compare (#27), cost breakdown (#29) | Done |
+| 4. Customer searches, views, saves IDPs | Browse and search (public), project page, save/remove favourites, favourites list, compare (#27), cost breakdown (#29), report a project | Done |
 | 5. ID tracks interest in IDPs | Views and times shortlisted on every Manage Portfolio card | Done |
 | 6. Platform Manager manages categories and gets reports | Create / edit / delete categories and see designers' requests; daily / weekly / monthly platform report with CSV; category health (#40); reported IDPs (#38) | Done |
 | Test data (about 100 records per type) | `scripts/generate_test_data.py` | Done |

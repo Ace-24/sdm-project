@@ -52,3 +52,21 @@ class Report:
                    (self.status, decision, managerID, self.closedDate, self.reportID))
         db.commit()
         return True
+
+    @staticmethod
+    def hasPendingReport(reporterID, idpID):
+        """Submit Report - a customer may have only one pending report per project."""
+        return get_db().execute("SELECT 1 FROM report WHERE reporter_id = ? AND idp_id = ? AND status = ?",
+                                (reporterID, idpID, REPORT_PENDING)).fetchone() is not None
+
+    def createReport(self):
+        """Submit Report - save a new pending report (reviewed in #38)."""
+        self.status, self.reportedDate = REPORT_PENDING, now_str()
+        db = get_db()
+        cur = db.execute("INSERT INTO report (idp_id, reporter_id, reason, description, evidence_urls, status, "
+                         "reported_date) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                         (self.idpID, self.reporterID, self.reason, self.description, ",".join(self.evidenceURLs),
+                          self.status, self.reportedDate))
+        db.commit()
+        self.reportID = cur.lastrowid
+        return self.reportID

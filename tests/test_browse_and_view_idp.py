@@ -16,7 +16,7 @@ from tests.helpers import account_id, add_idp, add_category, add_cost_items, cou
 
 def set_factors(**factors):
     rule = EstimationRule(None, "Factors", account_id("smanager"))
-    rule.unitRates = [UnitRate(code, None, None, rate) for code, _, _, rate in RENOVATION_ITEMS]
+    rule.unitRates = [UnitRate(code, name, unit, rate) for code, name, unit, rate in RENOVATION_ITEMS]
     rule.propertyFactors = {p: factors.get(p.replace(" ", "_").replace("-", "_"), 1.0) for p in PROPERTY_TYPES}
     assert CreateEstimationRuleController().createEstimationRule(rule)
 

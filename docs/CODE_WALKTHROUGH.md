@@ -14,7 +14,7 @@ In the flows below, each line is one method call, indented under the method that
 
 ## Shared code
 
-- **Application setup (registers every page, role menus, error pages):** `create_app()` [`app/__init__.py` L9-72](../app/__init__.py#L9-L72)
+- **Application setup (registers every page, role menus, error pages):** `create_app()` [`app/__init__.py` L9-73](../app/__init__.py#L9-L73)
 - **Database connection and schema:** `get_db()` [`app/db.py` L9-19](../app/db.py#L9-L19); `close_db()` [`app/db.py` L22-25](../app/db.py#L22-L25); `init_db()` [`app/db.py` L28-33](../app/db.py#L28-L33)
 - **Login session and access control:** `load_logged_in_user()` [`app/boundary/auth.py` L7-12](../app/boundary/auth.py#L7-L12); `login_required()` [`app/boundary/auth.py` L15-22](../app/boundary/auth.py#L15-L22); `role_required()` [`app/boundary/auth.py` L25-35](../app/boundary/auth.py#L25-L35)
 - **Shared report periods (#50 and Platform Reports):** `validatePeriod()` [`app/control/report_period.py` L7-15](../app/control/report_period.py#L7-L15); `calculateDateRange()` [`app/control/report_period.py` L18-26](../app/control/report_period.py#L18-L26)
@@ -35,6 +35,7 @@ In the flows below, each line is one method call, indented under the method that
 - [Manage User Profiles](#manage-user-profiles)
 - [Manage Company Information + Designer Page](#manage-company-information--designer-page)
 - [Manage Categories](#manage-categories)
+- [Submit Report on a Project](#submit-report-on-a-project)
 - [Platform Reports (daily / weekly / monthly)](#platform-reports-daily--weekly--monthly)
 - [#11 Manage Project Categories](#11-manage-project-categories)
 - [#13 Manage Portfolio](#13-manage-portfolio)
@@ -683,6 +684,77 @@ The Platform Manager creates categories (unique name, 2-40 characters), edits na
 - `test_platform_report_page_and_export` (L110-115)
 - `test_only_platform_managers` (L118-121)
 
+## Submit Report on a Project
+
+**Actor:** Customer
+
+Input for #38. A logged-in customer clicks 'Report this project' on an active project. `SubmitReportController._validateReport()` checks the reason is from the list, the description is 1000 characters or fewer, the optional evidence is a JPG/PNG under 5 MB, and the customer has no pending report on the same project. `Report.createReport()` saves it as Pending and every Platform Manager gets a notification; the report then appears in #38 Reported IDPs.
+
+**Classes**
+
+- <<boundary>> `SubmitReportPg` - [`app/boundary/submit_report_page.py` L9-47](../app/boundary/submit_report_page.py#L9-L47)
+- <<control>> `SubmitReportController` - [`app/control/submit_report_controller.py` L16-80](../app/control/submit_report_controller.py#L16-L80)
+- <<entity>> `IDP` - [`app/entity/idp.py` L10-197](../app/entity/idp.py#L10-L197)
+- <<entity>> `Notification` - [`app/entity/notification.py` L6-27](../app/entity/notification.py#L6-L27)
+- <<entity>> `Report` - [`app/entity/report.py` L7-72](../app/entity/report.py#L7-L72)
+- <<entity>> `UserAccount` - [`app/entity/user_account.py` L8-115](../app/entity/user_account.py#L8-L115)
+
+**Flow of each page (in call order)**
+
+**GET `/projects/<int:idpID>/report`** - route `displayReportForm()` [`app/boundary/submit_report_page.py` L50-52](../app/boundary/submit_report_page.py#L50-L52)
+
+- <<boundary>> `SubmitReportPg.displayReportForm()` - [`app/boundary/submit_report_page.py` L24-29](../app/boundary/submit_report_page.py#L24-L29)
+  - <<boundary>> `SubmitReportPg._checkAccess()` - [`app/boundary/submit_report_page.py` L13-22](../app/boundary/submit_report_page.py#L13-L22)
+    - <<control>> `SubmitReportController.getReportableIDP()` - [`app/control/submit_report_controller.py` L23-26](../app/control/submit_report_controller.py#L23-L26)
+      - <<entity>> `IDP.getIDPDetails()` - [`app/entity/idp.py` L47-50](../app/entity/idp.py#L47-L50)
+  - <<control>> `SubmitReportController.getReasons()` - [`app/control/submit_report_controller.py` L20-21](../app/control/submit_report_controller.py#L20-L21)
+  - page: `app/templates/report_form.html`
+
+**POST `/projects/<int:idpID>/report`** - route `submitReport()` [`app/boundary/submit_report_page.py` L55-57](../app/boundary/submit_report_page.py#L55-L57)
+
+- <<boundary>> `SubmitReportPg.submitReport()` - [`app/boundary/submit_report_page.py` L31-39](../app/boundary/submit_report_page.py#L31-L39)
+  - <<boundary>> `SubmitReportPg._checkAccess()` - [`app/boundary/submit_report_page.py` L13-22](../app/boundary/submit_report_page.py#L13-L22)
+    - <<control>> `SubmitReportController.getReportableIDP()` - [`app/control/submit_report_controller.py` L23-26](../app/control/submit_report_controller.py#L23-L26)
+      - <<entity>> `IDP.getIDPDetails()` - [`app/entity/idp.py` L47-50](../app/entity/idp.py#L47-L50)
+  - <<control>> `SubmitReportController.submitReport()` - [`app/control/submit_report_controller.py` L28-41](../app/control/submit_report_controller.py#L28-L41)
+    - <<control>> `SubmitReportController._validateReport()` - [`app/control/submit_report_controller.py` L43-62](../app/control/submit_report_controller.py#L43-L62)
+      - <<entity>> `Report.hasPendingReport()` - [`app/entity/report.py` L56-60](../app/entity/report.py#L56-L60)
+      - <<control>> `SubmitReportController._fileSize()` - [`app/control/submit_report_controller.py` L64-71](../app/control/submit_report_controller.py#L64-L71)
+    - <<control>> `SubmitReportController._saveEvidence()` - [`app/control/submit_report_controller.py` L73-80](../app/control/submit_report_controller.py#L73-L80)
+    - <<entity>> `Report.createReport()` - [`app/entity/report.py` L62-72](../app/entity/report.py#L62-L72)
+    - <<entity>> `UserAccount.findIDsByProfile()` - [`app/entity/user_account.py` L80-86](../app/entity/user_account.py#L80-L86)
+    - <<entity>> `Notification.send()` - [`app/entity/notification.py` L14-19](../app/entity/notification.py#L14-L19)
+  - <<boundary>> `SubmitReportPg.displayErrorMsg()` - [`app/boundary/submit_report_page.py` L46-47](../app/boundary/submit_report_page.py#L46-L47)
+    - <<boundary>> `SubmitReportPg.displayReportForm()` - [`app/boundary/submit_report_page.py` L24-29](../app/boundary/submit_report_page.py#L24-L29)
+      - <<boundary>> `SubmitReportPg._checkAccess()` - [`app/boundary/submit_report_page.py` L13-22](../app/boundary/submit_report_page.py#L13-L22)
+        - <<control>> `SubmitReportController.getReportableIDP()` - [`app/control/submit_report_controller.py` L23-26](../app/control/submit_report_controller.py#L23-L26)
+          - <<entity>> `IDP.getIDPDetails()` - [`app/entity/idp.py` L47-50](../app/entity/idp.py#L47-L50)
+      - <<control>> `SubmitReportController.getReasons()` - [`app/control/submit_report_controller.py` L20-21](../app/control/submit_report_controller.py#L20-L21)
+      - page: `app/templates/report_form.html`
+  - <<boundary>> `SubmitReportPg.displaySuccessPg()` - [`app/boundary/submit_report_page.py` L41-44](../app/boundary/submit_report_page.py#L41-L44)
+    - page: `app/templates/success.html`
+
+**Unit tests:** `tests/test_submit_report.py`
+
+- `test_valid_report_is_saved_as_pending` (L32-38)
+- `test_platform_managers_are_notified` (L41-45)
+- `test_description_is_optional` (L48-50)
+- `test_second_pending_report_is_rejected` (L53-58)
+- `test_can_report_again_after_review_closed` (L61-65)
+- `test_reason_must_be_from_list` (L68-70)
+- `test_description_length_limit` (L73-76)
+- `test_hidden_project_cannot_be_reported` (L79-81)
+- `test_only_customers_can_report` (L84-86)
+- `test_evidence_photo_is_saved` (L89-92)
+- `test_evidence_must_be_an_image` (L95-97)
+- `test_evidence_size_limit` (L100-102)
+- `test_visitor_is_sent_to_login` (L106-109)
+- `test_designer_gets_403` (L112-115)
+- `test_missing_or_hidden_project_404` (L118-121)
+- `test_project_page_shows_report_button_to_customer` (L124-127)
+- `test_full_flow_report_reaches_platform_manager` (L130-144)
+- `test_error_message_shown_on_page` (L147-151)
+
 ## Platform Reports (daily / weekly / monthly)
 
 **Actor:** Platform Manager
@@ -1001,7 +1073,7 @@ The period and date are validated and turned into a date range by `report_period
 - <<control>> `GenerateCostBreakdownController` - [`app/control/generate_cost_breakdown_controller.py` L9-49](../app/control/generate_cost_breakdown_controller.py#L9-L49)
 - <<entity>> `CostBreakdown` - [`app/entity/cost_breakdown.py` L22-73](../app/entity/cost_breakdown.py#L22-L73)
 - <<entity>> `EstimationRule` - [`app/entity/estimation_rule.py` L8-76](../app/entity/estimation_rule.py#L8-L76)
-- <<entity>> `UnitRate` - [`app/entity/unit_rate.py` L5-37](../app/entity/unit_rate.py#L5-L37)
+- <<entity>> `UnitRate` - [`app/entity/unit_rate.py` L5-42](../app/entity/unit_rate.py#L5-L42)
 
 **Flow of each page (in call order)**
 
@@ -1064,7 +1136,7 @@ The period and date are validated and turned into a date range by `report_period
 - <<control>> `ManageReportsController` - [`app/control/manage_reports_controller.py` L10-56](../app/control/manage_reports_controller.py#L10-L56)
 - <<entity>> `IDP` - [`app/entity/idp.py` L10-197](../app/entity/idp.py#L10-L197)
 - <<entity>> `Notification` - [`app/entity/notification.py` L6-27](../app/entity/notification.py#L6-L27)
-- <<entity>> `Report` - [`app/entity/report.py` L7-54](../app/entity/report.py#L7-L54)
+- <<entity>> `Report` - [`app/entity/report.py` L7-72](../app/entity/report.py#L7-L72)
 
 **Flow of each page (in call order)**
 
@@ -1174,64 +1246,81 @@ The period and date are validated and turned into a date range by `report_period
 
 **Actor:** Sales Manager
 
-#47. The form starts from the active rule. Validation: rule name, a positive rate for every item, multipliers between 0.5 and 3.0, known styles. New `UnitRate`s copy each item's name and unit, then `EstimationRule.saveRule()` saves everything and makes it the only active rule in one transaction. Old rules keep their rates.
+#47. The form starts from the active rule. The Sales Manager can edit each renovation item's name, unit and rate, remove items, or add new ones ('+ Add item'). Validation: rule name, at least one item, unique item names of 40 characters or fewer, a unit from the list, a positive rate, multipliers between 0.5 and 3.0, known styles. `_assignItemCodes()` keeps the code of existing items and makes a new, never-used code for new ones. `EstimationRule.saveRule()` saves everything and makes it the only active rule in one transaction. Old rules (and past breakdowns) keep their items.
 
 **Classes**
 
-- <<boundary>> `CreateEstimationRulePg` - [`app/boundary/estimation_rule_page.py` L19-49](../app/boundary/estimation_rule_page.py#L19-L49)
-- <<control>> `CreateEstimationRuleController` - [`app/control/create_estimation_rule_controller.py` L8-51](../app/control/create_estimation_rule_controller.py#L8-L51)
+- <<boundary>> `CreateEstimationRulePg` - [`app/boundary/estimation_rule_page.py` L19-64](../app/boundary/estimation_rule_page.py#L19-L64)
+- <<control>> `CreateEstimationRuleController` - [`app/control/create_estimation_rule_controller.py` L11-85](../app/control/create_estimation_rule_controller.py#L11-L85)
 - <<entity>> `Category` - [`app/entity/category.py` L6-92](../app/entity/category.py#L6-L92)
 - <<entity>> `EstimationRule` - [`app/entity/estimation_rule.py` L8-76](../app/entity/estimation_rule.py#L8-L76)
-- <<entity>> `UnitRate` - [`app/entity/unit_rate.py` L5-37](../app/entity/unit_rate.py#L5-L37)
+- <<entity>> `UnitRate` - [`app/entity/unit_rate.py` L5-42](../app/entity/unit_rate.py#L5-L42)
 
 **Flow of each page (in call order)**
 
-**GET `/sales/estimation-rules/`** - route `displayEstimationRuleForm()` [`app/boundary/estimation_rule_page.py` L52-55](../app/boundary/estimation_rule_page.py#L52-L55)
+**GET `/sales/estimation-rules/`** - route `displayEstimationRuleForm()` [`app/boundary/estimation_rule_page.py` L67-70](../app/boundary/estimation_rule_page.py#L67-L70)
 
 - <<boundary>> `CreateEstimationRulePg.displayEstimationRuleForm()` - [`app/boundary/estimation_rule_page.py` L23-25](../app/boundary/estimation_rule_page.py#L23-L25)
-  - <<control>> `CreateEstimationRuleController.getActiveRule()` - [`app/control/create_estimation_rule_controller.py` L12-14](../app/control/create_estimation_rule_controller.py#L12-L14)
+  - <<control>> `CreateEstimationRuleController.getActiveRule()` - [`app/control/create_estimation_rule_controller.py` L15-17](../app/control/create_estimation_rule_controller.py#L15-L17)
     - <<entity>> `EstimationRule.findActive()` - [`app/entity/estimation_rule.py` L33-37](../app/entity/estimation_rule.py#L33-L37)
-  - <<boundary>> `CreateEstimationRulePg.showCurrentRule()` - [`app/boundary/estimation_rule_page.py` L27-30](../app/boundary/estimation_rule_page.py#L27-L30)
-    - <<control>> `CreateEstimationRuleController.getStyles()` - [`app/control/create_estimation_rule_controller.py` L16-18](../app/control/create_estimation_rule_controller.py#L16-L18)
+  - <<boundary>> `CreateEstimationRulePg.showCurrentRule()` - [`app/boundary/estimation_rule_page.py` L27-38](../app/boundary/estimation_rule_page.py#L27-L38)
+    - <<control>> `CreateEstimationRuleController.getStyles()` - [`app/control/create_estimation_rule_controller.py` L19-21](../app/control/create_estimation_rule_controller.py#L19-L21)
       - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
+    - <<boundary>> `CreateEstimationRulePg._itemRows()` - [`app/boundary/estimation_rule_page.py` L40-45](../app/boundary/estimation_rule_page.py#L40-L45)
+    - <<control>> `CreateEstimationRuleController.getUnits()` - [`app/control/create_estimation_rule_controller.py` L23-24](../app/control/create_estimation_rule_controller.py#L23-L24)
     - page: `app/templates/estimation_rule.html`
 
-**POST `/sales/estimation-rules/`** - route `clickSave()` [`app/boundary/estimation_rule_page.py` L58-61](../app/boundary/estimation_rule_page.py#L58-L61)
+**POST `/sales/estimation-rules/`** - route `clickSave()` [`app/boundary/estimation_rule_page.py` L73-76](../app/boundary/estimation_rule_page.py#L73-L76)
 
-- <<boundary>> `CreateEstimationRulePg.clickSave()` - [`app/boundary/estimation_rule_page.py` L32-40](../app/boundary/estimation_rule_page.py#L32-L40)
-  - <<control>> `CreateEstimationRuleController.createEstimationRule()` - [`app/control/create_estimation_rule_controller.py` L20-28](../app/control/create_estimation_rule_controller.py#L20-L28)
-    - <<control>> `CreateEstimationRuleController._validateRule()` - [`app/control/create_estimation_rule_controller.py` L31-51](../app/control/create_estimation_rule_controller.py#L31-L51)
+- <<boundary>> `CreateEstimationRulePg.clickSave()` - [`app/boundary/estimation_rule_page.py` L47-55](../app/boundary/estimation_rule_page.py#L47-L55)
+  - <<boundary>> `CreateEstimationRulePg._itemRows()` - [`app/boundary/estimation_rule_page.py` L40-45](../app/boundary/estimation_rule_page.py#L40-L45)
+  - <<control>> `CreateEstimationRuleController.createEstimationRule()` - [`app/control/create_estimation_rule_controller.py` L26-35](../app/control/create_estimation_rule_controller.py#L26-L35)
+    - <<control>> `CreateEstimationRuleController._validateRule()` - [`app/control/create_estimation_rule_controller.py` L38-67](../app/control/create_estimation_rule_controller.py#L38-L67)
+      - <<control>> `CreateEstimationRuleController.getStyles()` - [`app/control/create_estimation_rule_controller.py` L19-21](../app/control/create_estimation_rule_controller.py#L19-L21)
+        - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
+    - <<control>> `CreateEstimationRuleController._assignItemCodes()` - [`app/control/create_estimation_rule_controller.py` L69-85](../app/control/create_estimation_rule_controller.py#L69-L85)
       - <<entity>> `UnitRate.getActiveRates()` - [`app/entity/unit_rate.py` L25-31](../app/entity/unit_rate.py#L25-L31)
-      - <<control>> `CreateEstimationRuleController.getStyles()` - [`app/control/create_estimation_rule_controller.py` L16-18](../app/control/create_estimation_rule_controller.py#L16-L18)
-        - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
-    - <<entity>> `UnitRate.findByCode()` - [`app/entity/unit_rate.py` L17-23](../app/entity/unit_rate.py#L17-L23)
+      - <<entity>> `UnitRate.getAllCodes()` - [`app/entity/unit_rate.py` L39-42](../app/entity/unit_rate.py#L39-L42)
     - <<entity>> `EstimationRule.saveRule()` - [`app/entity/estimation_rule.py` L50-72](../app/entity/estimation_rule.py#L50-L72)
-  - <<boundary>> `CreateEstimationRulePg.displaySuccessPg()` - [`app/boundary/estimation_rule_page.py` L42-46](../app/boundary/estimation_rule_page.py#L42-L46)
+  - <<boundary>> `CreateEstimationRulePg.displaySuccessPg()` - [`app/boundary/estimation_rule_page.py` L57-61](../app/boundary/estimation_rule_page.py#L57-L61)
     - page: `app/templates/success.html`
-  - <<boundary>> `CreateEstimationRulePg.displayErrorMsg()` - [`app/boundary/estimation_rule_page.py` L48-49](../app/boundary/estimation_rule_page.py#L48-L49)
-    - <<control>> `CreateEstimationRuleController.getActiveRule()` - [`app/control/create_estimation_rule_controller.py` L12-14](../app/control/create_estimation_rule_controller.py#L12-L14)
+  - <<boundary>> `CreateEstimationRulePg.displayErrorMsg()` - [`app/boundary/estimation_rule_page.py` L63-64](../app/boundary/estimation_rule_page.py#L63-L64)
+    - <<control>> `CreateEstimationRuleController.getActiveRule()` - [`app/control/create_estimation_rule_controller.py` L15-17](../app/control/create_estimation_rule_controller.py#L15-L17)
       - <<entity>> `EstimationRule.findActive()` - [`app/entity/estimation_rule.py` L33-37](../app/entity/estimation_rule.py#L33-L37)
-    - <<boundary>> `CreateEstimationRulePg.showCurrentRule()` - [`app/boundary/estimation_rule_page.py` L27-30](../app/boundary/estimation_rule_page.py#L27-L30)
-      - <<control>> `CreateEstimationRuleController.getStyles()` - [`app/control/create_estimation_rule_controller.py` L16-18](../app/control/create_estimation_rule_controller.py#L16-L18)
+    - <<boundary>> `CreateEstimationRulePg.showCurrentRule()` - [`app/boundary/estimation_rule_page.py` L27-38](../app/boundary/estimation_rule_page.py#L27-L38)
+      - <<control>> `CreateEstimationRuleController.getStyles()` - [`app/control/create_estimation_rule_controller.py` L19-21](../app/control/create_estimation_rule_controller.py#L19-L21)
         - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
+      - <<boundary>> `CreateEstimationRulePg._itemRows()` - [`app/boundary/estimation_rule_page.py` L40-45](../app/boundary/estimation_rule_page.py#L40-L45)
+      - <<control>> `CreateEstimationRuleController.getUnits()` - [`app/control/create_estimation_rule_controller.py` L23-24](../app/control/create_estimation_rule_controller.py#L23-L24)
       - page: `app/templates/estimation_rule.html`
 
 **Unit tests:** `tests/test_us47_create_estimation_rule.py`
 
 - `test_active_rule_has_all_items_and_property_factors` (L20-24)
 - `test_valid_rule_is_saved_and_activated` (L27-37)
-- `test_unit_rates_copy_name_and_unit` (L40-43)
+- `test_existing_items_keep_their_code` (L40-43)
 - `test_old_rule_keeps_its_rates` (L46-49)
 - `test_missing_name_is_rejected` (L52-56)
 - `test_rates_must_be_positive` (L59-65)
-- `test_every_item_needs_a_rate` (L68-73)
-- `test_factors_must_be_between_0_5_and_3` (L76-82)
-- `test_boundary_factors_are_allowed` (L85-89)
-- `test_unknown_style_is_rejected` (L92-95)
-- `test_only_sales_manager_can_open` (L99-101)
-- `test_form_shows_current_rule` (L104-107)
-- `test_save_from_page` (L118-123)
-- `test_page_errors_keep_entered_values` (L126-131)
+- `test_item_name_and_unit_can_be_edited` (L69-74)
+- `test_items_can_be_removed` (L77-82)
+- `test_new_item_gets_a_generated_code` (L85-90)
+- `test_new_item_does_not_reuse_an_old_code` (L93-97)
+- `test_unknown_code_is_treated_as_new_item` (L100-104)
+- `test_rule_needs_at_least_one_item` (L107-112)
+- `test_item_name_rules` (L115-124)
+- `test_unit_must_be_from_list` (L127-132)
+- `test_cost_breakdown_and_designer_use_new_list` (L135-144)
+- `test_factors_must_be_between_0_5_and_3` (L147-153)
+- `test_boundary_factors_are_allowed` (L156-160)
+- `test_unknown_style_is_rejected` (L163-166)
+- `test_only_sales_manager_can_open` (L170-172)
+- `test_form_shows_current_rule` (L175-178)
+- `test_save_from_page` (L191-196)
+- `test_page_errors_keep_entered_values` (L199-205)
+- `test_page_has_add_and_remove_controls` (L208-211)
+- `test_page_add_edit_remove_items` (L214-224)
+- `test_page_errors_keep_added_rows` (L227-232)
 
 ## 50 Export Sales Report
 

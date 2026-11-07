@@ -12,7 +12,9 @@
       <tr><th>Description</th><td>{{ report.description or '-' }}</td></tr>
       <tr><th>Reported by</th><td>{{ report.reporterName }}</td></tr>
       <tr><th>Report date</th><td>{{ report.reportedDate }}</td></tr>
-      <tr><th>Evidence</th><td>{{ report.evidenceURLs|join(', ') if report.evidenceURLs else 'None attached' }}</td></tr>
+      <tr><th>Evidence</th><td>{% if report.evidenceURLs %}{% for e in report.evidenceURLs %}
+        <a href="{{ url_for('static', filename='uploads/' ~ e) }}" target="_blank"><img class="evidence" src="{{ url_for('static', filename='uploads/' ~ e) }}" alt="Evidence"></a>{% endfor %}
+        {% else %}None attached{% endif %}</td></tr>
       <tr><th>Status</th><td>{{ report.status }}{% if report.decision %} ({{ report.decision }}){% endif %}</td></tr>
     </table>
   </div>

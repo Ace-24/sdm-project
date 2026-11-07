@@ -29,12 +29,13 @@ def create_app(test_config=None):
                               manage_reports_page, category_health_page,
                               sign_up_page, choose_preferences_page, browse_idp_page, view_idp_page,
                               edit_user_account_page, manage_user_profiles_page, company_profile_page,
-                              manage_categories_page, platform_report_page)
+                              manage_categories_page, platform_report_page, submit_report_page)
     app.register_blueprint(login_page.bp)
     app.register_blueprint(sign_up_page.bp)                  # Sign up (customers)
     app.register_blueprint(choose_preferences_page.bp)       # Choose interests (customers)
     app.register_blueprint(browse_idp_page.bp)               # Browse / search projects (public)
     app.register_blueprint(view_idp_page.bp)                 # Project page + favourites (public)
+    app.register_blueprint(submit_report_page.bp)            # Submit report (customers) -> #38
     app.register_blueprint(create_user_account_page.bp)      # #1
     app.register_blueprint(view_activity_log_page.bp)        # #7
     app.register_blueprint(edit_user_account_page.bp)        # Edit account (User Admin)

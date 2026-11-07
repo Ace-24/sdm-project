@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Report Project{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('view_idp.displayIDPPage', idpID=idp.idpID) }}">&larr; Back to the project</a></p>
+<h1>Report this project</h1>
+<p class="muted">{{ idp.title }} &middot; by {{ idp.designerName }}</p>
+{% if errors %}
+<div class="flash flash-error"><strong>Please fix the following:</strong>
+  <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>
+{% endif %}
+<form method="post" enctype="multipart/form-data" class="card" style="max-width:600px">
+  <label>Reason
+    <select name="reason" required>
+      <option value="">-- Select a reason --</option>
+      {% for r in reasons %}<option {% if form.get('reason') == r %}selected{% endif %}>{{ r }}</option>{% endfor %}
+    </select></label>
+  <label>Description <small class="muted">(optional)</small>
+    <textarea name="description" rows="4" maxlength="1000" placeholder="What is wrong with this project?">{{ form.get('description', '') }}</textarea></label>
+  <label>Evidence photo <small class="muted">(optional, JPG or PNG under 5 MB)</small>
+    <input type="file" name="evidence" accept=".jpg,.jpeg,.png"></label>
+  <p class="muted">Reports are reviewed by the Platform Manager. False reports may lead to your account being suspended.</p>
+  <button class="btn btn-danger" type="submit">Submit report</button>
+  <a class="btn btn-secondary" href="{{ url_for('view_idp.displayIDPPage', idpID=idp.idpID) }}">Cancel</a>
+</form>
+{% endblock %}

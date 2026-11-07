@@ -39,6 +39,8 @@ STORIES = [
      "manage_company_profile_controller", "test_company_profile.py"),
     ("-", "Manage Categories", "Platform Manager", "manage_categories_page", "manage_categories_controller",
      "test_category_management_and_platform_report.py"),
+    ("-", "Submit Report on a Project", "Customer", "submit_report_page", "submit_report_controller",
+     "test_submit_report.py"),
     ("-", "Platform Reports (daily / weekly / monthly)", "Platform Manager", "platform_report_page",
      "platform_report_controller", "test_category_management_and_platform_report.py"),
     ("#11", "Manage Project Categories", "Interior Designer", "manage_project_categories_page",

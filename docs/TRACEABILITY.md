@@ -18,17 +18,18 @@ Each story follows the same Boundary-Control-Entity (BCE) structure as its class
 | - | Manage User Profiles | User Admin | `ManageUserProfilesPg` | `ManageUserProfilesController` | `UserProfile` | 15 |
 | - | Manage Company Information + Designer Page | Interior Designer / Anyone | `ManageCompanyProfilePg`, `DesignerPg` | `ManageCompanyProfileController` | `CompanyProfile`, `IDP`, `UserAccount` | 8 |
 | - | Manage Categories | Platform Manager | `ManageCategoriesPg` | `ManageCategoriesController` | `Category`, `Notification` | 11 |
+| - | Submit Report on a Project | Customer | `SubmitReportPg` | `SubmitReportController` | `IDP`, `Notification`, `Report`, `UserAccount` | 18 |
 | - | Platform Reports (daily / weekly / monthly) | Platform Manager | `PlatformReportPg` | `PlatformReportController` | `PlatformReport` | 11 |
 | #11 | Manage Project Categories | Interior Designer | `ManageProjectCategoriesPg` | `ManageProjectCategoriesController` | `Category`, `CustomerPreference`, `IDPCategory`, `Notification`, `Recommendation`, `UserAccount` | 11 |
-| #13 | Manage Portfolio | Interior Designer | `ManagePortfolioPg` | `ManagePortfolioController` | `IDP`, `IDPCostItem` | 21 |
+| #13 | Manage Portfolio | Interior Designer | `ManagePortfolioPg` | `ManagePortfolioController` | `IDP`, `IDPCostItem`, `UnitRate` | 21 |
 | #27 | Compare Favourite IDPs | Customer | `CompareFavouritesPg` | `CompareFavouritesController` | `Favourite`, `IDP`, `IDPComparison` | 11 |
 | #29 | Generate Cost Breakdown | Customer | `GenerateCostBreakdownPg` | `GenerateCostBreakdownController` | `BreakdownItem`, `CostBreakdown`, `EstimationRule`, `UnitRate` | 12 |
 | #38 | Manage Reports on Inappropriate IDPs | Platform Manager | `ManageReportsPg` | `ManageReportsController` | `IDP`, `Notification`, `Report` | 12 |
 | #40 | Category Health Report | Platform Manager | `CategoryHealthPg` | `CategoryHealthController` | `Category`, `CategoryHealth`, `IDP` | 8 |
-| #47 | Create Cost Estimation Rules | Sales Manager | `CreateEstimationRulePg` | `CreateEstimationRuleController` | `Category`, `EstimationRule`, `UnitRate` | 14 |
+| #47 | Create Cost Estimation Rules | Sales Manager | `CreateEstimationRulePg` | `CreateEstimationRuleController` | `Category`, `EstimationRule`, `UnitRate` | 25 |
 | #50 | Export Sales Report | Sales Manager | `ExportSalesReportPg` | `ExportSalesReportController` | `SalesReport`, `SalesReportRow` | 11 |
 
-Total: **204** test functions for these stories, plus `tests/test_generate_test_data.py` for the test data. pytest reports a higher number because parameterised tests run once per input value.
+Total: **233** test functions for these stories, plus `tests/test_generate_test_data.py` for the test data. pytest reports a higher number because parameterised tests run once per input value.
 
 ### Naming between design and code
 
@@ -547,6 +548,56 @@ Total: **204** test functions for these stories, plus `tests/test_generate_test_
 
 **Unit tests:** `tests/test_category_management_and_platform_report.py` (11 tests)
 
+## Submit Report on a Project
+
+**Actor:** Customer
+
+| Layer | Class | File |
+|---|---|---|
+| <<boundary>> | `SubmitReportPg` | `app/boundary/submit_report_page.py` |
+| <<control>> | `SubmitReportController` | `app/control/submit_report_controller.py` |
+| <<entity>> | `IDP` | `app/entity/idp.py` |
+| <<entity>> | `Notification` | `app/entity/notification.py` |
+| <<entity>> | `Report` | `app/entity/report.py` |
+| <<entity>> | `UserAccount` | `app/entity/user_account.py` |
+
+**`SubmitReportPg` methods (boundary)**
+
+- `- checkAccess(idpID)`
+- `+ displayReportForm(idpID, form, errors)`
+- `+ submitReport(idpID, form, files)`
+- `+ displaySuccessPg(idp)`
+- `+ displayErrorMsg(idpID, form, errors)`
+
+**`SubmitReportController` methods (control)**
+
+- `+ getReasons()`
+- `+ getReportableIDP(idpID)`
+- `+ submitReport(customer, idp, reason, description, evidence)`
+- `- validateReport(customer, idp, reason, description, evidence)`
+- `- fileSize(fileStorage)`
+- `- saveEvidence(fileStorage)`
+
+**Entity methods used**
+
+- `IDP.getIDPDetails()`
+- `Notification.send()`
+- `Report.createReport()`
+- `Report.hasPendingReport()`
+- `UserAccount.findIDsByProfile()`
+- `new Report()`
+
+**Pages (URL routes)**
+
+| HTTP | URL | Route function |
+|---|---|---|
+| GET | `/projects/<int:idpID>/report` | `displayReportForm` |
+| POST | `/projects/<int:idpID>/report` | `submitReport` |
+
+**Templates:** `app/templates/report_form.html`, `app/templates/success.html`
+
+**Unit tests:** `tests/test_submit_report.py` (18 tests)
+
 ## Platform Reports (daily / weekly / monthly)
 
 **Actor:** Platform Manager
@@ -650,6 +701,7 @@ Total: **204** test functions for these stories, plus `tests/test_generate_test_
 | <<control>> | `ManagePortfolioController` | `app/control/manage_portfolio_controller.py` |
 | <<entity>> | `IDP` | `app/entity/idp.py` |
 | <<entity>> | `IDPCostItem` | `app/entity/idp_cost_item.py` |
+| <<entity>> | `UnitRate` | `app/entity/unit_rate.py` |
 
 **`ManagePortfolioPg` methods (boundary)**
 
@@ -694,6 +746,7 @@ Total: **204** test functions for these stories, plus `tests/test_generate_test_
 - `IDP.hasReports()`
 - `IDP.updateIDP()`
 - `IDP.updateStatus()`
+- `UnitRate.getActiveRates()`
 - `new IDP()`
 - `new IDPCostItem()`
 
@@ -922,6 +975,7 @@ Total: **204** test functions for these stories, plus `tests/test_generate_test_
 
 - `+ displayEstimationRuleForm()`
 - `+ showCurrentRule(rule, entered, errors)`
+- `- itemRows(form)`
 - `+ clickSave(form)`
 - `+ displaySuccessPg(rule)`
 - `+ displayErrorMsg(form, errors)`
@@ -930,16 +984,18 @@ Total: **204** test functions for these stories, plus `tests/test_generate_test_
 
 - `+ getActiveRule()`
 - `+ getStyles()`
+- `+ getUnits()`
 - `+ createEstimationRule(rule)`
 - `- validateRule(rule)`
+- `- assignItemCodes(unitRates)`
 
 **Entity methods used**
 
 - `Category.getActiveCategories()`
 - `EstimationRule.findActive()`
 - `EstimationRule.saveRule()`
-- `UnitRate.findByCode()`
 - `UnitRate.getActiveRates()`
+- `UnitRate.getAllCodes()`
 - `new EstimationRule()`
 - `new UnitRate()`
 
@@ -952,7 +1008,7 @@ Total: **204** test functions for these stories, plus `tests/test_generate_test_
 
 **Templates:** `app/templates/estimation_rule.html`, `app/templates/success.html`
 
-**Unit tests:** `tests/test_us47_create_estimation_rule.py` (14 tests)
+**Unit tests:** `tests/test_us47_create_estimation_rule.py` (25 tests)
 
 ## #50 Export Sales Report
 

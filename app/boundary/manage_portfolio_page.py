@@ -5,7 +5,7 @@ from app.constants import INTERIOR_DESIGNER, PROPERTY_TYPES
 from app.control.manage_portfolio_controller import ManagePortfolioController
 from app.entity.idp import IDP
 from app.entity.idp_cost_item import IDPCostItem, UNITS
-from app.constants import RENOVATION_ITEMS
+from app.entity.unit_rate import UnitRate
 
 bp = Blueprint("manage_portfolio", __name__, url_prefix="/designer/portfolio")
 
@@ -61,7 +61,7 @@ class ManagePortfolioPg:
         if items is None:
             items = idp.getCostItems() if idp.idpID else []
         return render_template("idp_edit.html", idp=idp, property_types=PROPERTY_TYPES, errors=errors or [],
-                               items=items, units=UNITS, item_names=[n for _, n, _, _ in RENOVATION_ITEMS], new=new)
+                               items=items, units=UNITS, item_names=[r.itemName for r in UnitRate.getActiveRates()], new=new)
 
     def displayAddProjectForm(self, designerID):
         return self.displayEditForm(IDP(None, designerID, ""), new=True)
