@@ -12,9 +12,11 @@
   <form method="post" action="{{ url_for('view_idp.clickFavourite', idpID=idp.idpID) }}">
     <input type="hidden" name="property" value="{{ request.args.get('property', '') }}">
     <button class="btn {{ 'btn-secondary' if saved else '' }}" type="submit">{{ 'Saved - remove from favourites' if saved else 'Save to favourites' }}</button>
+    {% if idp.status == 'Active' %}<a class="btn btn-secondary" href="{{ url_for('submit_report.displayReportForm', idpID=idp.idpID) }}">Report this project</a>{% endif %}
   </form>
   {% elif not g.user %}
-  <a class="btn" href="{{ url_for('sign_up.displaySignUpForm') }}">Sign up to save this project</a>
+  <div><a class="btn" href="{{ url_for('sign_up.displaySignUpForm') }}">Sign up to save this project</a>
+    <a class="btn btn-secondary" href="{{ url_for('submit_report.displayReportForm', idpID=idp.idpID) }}">Report</a></div>
   {% endif %}
 </div>
 

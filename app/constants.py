@@ -30,6 +30,10 @@ CATEGORY_INACTIVE = "Inactive"
 REPORT_PENDING = "Pending"
 REPORT_CLOSED = "Closed"
 
+REPORT_REASONS = ["Copied photos from another designer", "Misleading cost information",
+                  "Inappropriate content", "Fake project (not completed by this designer)",
+                  "Spam / advertising", "Offensive description"]
+
 DECISION_HIDE = "Hide IDP"
 DECISION_WARN = "Warn"
 DECISION_DISMISS = "Dismiss"
@@ -49,7 +53,8 @@ MAX_FACTOR = 3.0
 FACTOR_PROPERTY = "PROPERTY"
 FACTOR_STYLE = "STYLE"
 
-# Renovation items (code, name, unit, starter rate in SGD) - used by #47 and #29
+# Starter renovation items (code, name, unit, rate in SGD) for the first rule. After that the Sales
+# Manager edits the list in #47; #29 and the designer suggestions read the active rule.
 RENOVATION_ITEMS = [
     ("FLOOR", "Vinyl flooring", "sqm", 45), ("TILE", "Bathroom tiling", "sqm", 85),
     ("PAINT", "Wall painting", "sqm", 8), ("CEIL", "False ceiling", "sqm", 60),

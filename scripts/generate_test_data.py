@@ -55,9 +55,7 @@ AREA = {"HDB 3-Room": (60, 70), "HDB 4-Room": (85, 95), "HDB 5-Room": (105, 120)
 ITEMS = C.RENOVATION_ITEMS
 PROPERTY_FACTORS = {"HDB 3-Room": 1.0, "HDB 4-Room": 1.0, "HDB 5-Room": 1.05, "Condo": 1.15, "Landed": 1.3}
 
-REPORT_REASONS = ["Copied photos from another designer", "Misleading cost information",
-                  "Inappropriate content", "Fake project (not completed by this designer)",
-                  "Spam / advertising", "Offensive description"]
+REPORT_REASONS = C.REPORT_REASONS
 TITLE_WORDS = ["Cosy", "Bright", "Serene", "Bold", "Warm", "Airy", "Elegant", "Calm", "Modern", "Timeless"]
 
 

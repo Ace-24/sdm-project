@@ -91,10 +91,17 @@ NOTES = {
         "`CategoryHealth.calculateScore()` scales each measure against the highest category: "
         "40% IDPs + 40% interest + 20% growth, labelled Doing Well / Stable / At Risk / No data. Active categories "
         "can be flagged Under Review.",
-    "Create Cost Estimation Rules": "#47. The form starts from the active rule. Validation: rule name, a positive rate "
-        "for every item, multipliers between 0.5 and 3.0, known styles. New `UnitRate`s copy each item's name and "
-        "unit, then `EstimationRule.saveRule()` saves everything and makes it the only active rule in one "
-        "transaction. Old rules keep their rates.",
+    "Submit Report on a Project": "Input for #38. A logged-in customer clicks 'Report this project' on an active "
+        "project. `SubmitReportController._validateReport()` checks the reason is from the list, the description "
+        "is 1000 characters or fewer, the optional evidence is a JPG/PNG under 5 MB, and the customer has no "
+        "pending report on the same project. `Report.createReport()` saves it as Pending and every Platform "
+        "Manager gets a notification; the report then appears in #38 Reported IDPs.",
+    "Create Cost Estimation Rules": "#47. The form starts from the active rule. The Sales Manager can edit each "
+        "renovation item's name, unit and rate, remove items, or add new ones ('+ Add item'). Validation: rule "
+        "name, at least one item, unique item names of 40 characters or fewer, a unit from the list, a positive "
+        "rate, multipliers between 0.5 and 3.0, known styles. `_assignItemCodes()` keeps the code of existing "
+        "items and makes a new, never-used code for new ones. `EstimationRule.saveRule()` saves everything and "
+        "makes it the only active rule in one transaction. Old rules (and past breakdowns) keep their items.",
     "Export Sales Report": "#50. The period and date are validated; `report_period.calculateDateRange()` gives "
         "Monday-Sunday for weekly and the whole month for monthly. `SalesReportRow.findByDateRange()` builds one row "
         "per day from saved cost breakdowns, IDP views and favourites; `SalesReport` adds the totals and writes "

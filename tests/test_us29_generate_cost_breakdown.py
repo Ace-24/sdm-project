@@ -13,7 +13,7 @@ def set_rule(condo=1.2, japandi=1.5):
     """Make an active #47 rule with known multipliers."""
     add_category("Japandi")
     rule = EstimationRule(None, "Test rule", account_id("smanager"))
-    rule.unitRates = [UnitRate(code, None, None, rate) for code, _, _, rate in RENOVATION_ITEMS]
+    rule.unitRates = [UnitRate(code, name, unit, rate) for code, name, unit, rate in RENOVATION_ITEMS]
     rule.propertyFactors = {p: (condo if p == "Condo" else 1.0) for p in PROPERTY_TYPES}
     rule.styleFactors = {"Japandi": japandi}
     assert CreateEstimationRuleController().createEstimationRule(rule)
