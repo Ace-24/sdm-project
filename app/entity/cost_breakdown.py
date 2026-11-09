@@ -11,11 +11,11 @@ class BreakdownItem:
         self.unit = unit
         self.quantity = quantity
         self.unitRate = unitRate
-        self.factor = factor           # property type x style multiplier from #47
+        self.factor = factor
         self.lineTotal = self.calculateLineTotal()
 
     def calculateLineTotal(self):
-        """S3 - quantity x unit rate x multiplier."""
+        """Quantity x unit rate x multiplier."""
         return round(self.quantity * self.unitRate * self.factor, 2)
 
 
@@ -50,14 +50,14 @@ class CostBreakdown:
         return self.gst
 
     def calculateTotal(self):
-        """S4 - subtotal, 9% GST and total."""
+        """Subtotal, 9% GST and total."""
         self.calculateSubtotal()
         self.calculateGst()
         self.total = round(self.subtotal + self.gst, 2)
         return self.total
 
     def saveBreakdown(self):
-        """Main flow step 8 - saved with the customer, rule and date (used by #50)."""
+        """Saved with the customer, rule and date (used by #50)."""
         db = get_db()
         self.createdDate = now_str()
         cur = db.execute("INSERT INTO cost_breakdown (customer_id, rule_id, property_type, style, subtotal, gst, "

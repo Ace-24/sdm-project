@@ -151,3 +151,20 @@ def test_page_lists_current_accounts_when_opened(client):
 def test_role_filter(ctx):
     names = [a.username for a in ViewActivityLogController().searchUserAccount("", "Customer")]
     assert names == ["customer"]
+
+
+def test_page_uses_displayErrorMsg_for_both_messages(client, app, monkeypatch):
+    """Steps 5 and 10 of the sequence diagram: the empty cases go through displayErrorMsg()."""
+    from app.boundary.view_activity_log_page import ViewActivityLogPg
+    seen = []
+    original = ViewActivityLogPg.displayErrorMsg
+    monkeypatch.setattr(ViewActivityLogPg, "displayErrorMsg",
+                        lambda self, msg, **kw: seen.append(msg) or original(self, msg, **kw))
+    login(client, "admin")
+    client.get("/admin/activity-log/?keyword=zzzz")
+    with app.app_context():
+        pid = acc("pmanager").accountID
+    client.get(f"/admin/activity-log/{pid}")
+    client.get(f"/admin/activity-log/{pid}?from=2026-02-01&to=2026-01-01")
+    assert seen == ["No accounts found.", "No activity recorded for this account.",
+                    "The 'from' date must be on or before the 'to' date."]

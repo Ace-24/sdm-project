@@ -13,7 +13,7 @@ class CreateEstimationRuleController:
         self.errorMsgs = []
 
     def getActiveRule(self):
-        """S1 - the current rule with its rates and multipliers."""
+        """The current rule with its rates and multipliers."""
         return EstimationRule.findActive()
 
     def getStyles(self):
@@ -24,17 +24,16 @@ class CreateEstimationRuleController:
         return UNITS
 
     def createEstimationRule(self, rule):
-        """Main flow steps 7-9. `rule` holds the name, the edited renovation item list (UnitRate:
+        """`rule` holds the name, the edited renovation item list (UnitRate:
         itemCode is blank for a new item) and the two factor maps. Returns True if saved and activated."""
-        for r in rule.unitRates:                     # tidy the typed text before checking it
+        for r in rule.unitRates:
             r.itemName = " ".join((r.itemName or "").split())
             r.itemCode = (r.itemCode or "").strip().upper()
         if not self._validateRule(rule):
             return False
-        self._assignItemCodes(rule.unitRates)        # S3 - keep codes of existing items, new code for new items
-        return rule.saveRule()                       # S4 - save and activate
+        self._assignItemCodes(rule.unitRates)
+        return rule.saveRule()
 
-    # ---- Sub-flow S2: Validate Items, Rates and Multipliers ----
     def _validateRule(self, rule):
         errors = []
         if not (rule.ruleName or "").strip():

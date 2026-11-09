@@ -12,14 +12,12 @@ class CompareFavouritesPg:
         self.controller = CompareFavouritesController()
 
     def displayFavourites(self, customerID, error=None, selected=None):
-        """Main flow 1-2."""
         return self.displayFavouriteList(self.controller.getFavourites(customerID), error, selected or [])
 
     def displayFavouriteList(self, favourites, error, selected):
         return render_template("favourites.html", favourites=favourites, error=error, selected=set(selected))
 
     def clickCompare(self, customerID, idpIDs):
-        """Main flow 4."""
         comparison = self.controller.compareFavourites(customerID, idpIDs)
         if comparison is None:
             return self.displayErrorMsg(customerID, self.controller.errorMsg, idpIDs)

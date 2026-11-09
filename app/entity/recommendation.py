@@ -13,7 +13,7 @@ class Recommendation:
 
     @staticmethod
     def refreshRecommendations(idpID, customerIDs):
-        """Sub-flow S2 - the IDP is now recommended to exactly these customers."""
+        """The IDP is now recommended to exactly these customers."""
         db = get_db()
         db.execute("DELETE FROM recommendation WHERE idp_id = ?", (idpID,))
         stamp = now_str()

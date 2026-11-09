@@ -67,7 +67,7 @@ NOTES = {
     "View Account Activity Log": "#7. All current accounts are listed when the page opens; the keyword and role narrow "
         "the list. Selecting an account shows its log newest first. The log can be filtered by type and date range "
         "(dates are validated), exported as CSV, and the account suspended or reactivated (both are logged as "
-        "Status Change).",
+        "Status Change). When there are no accounts or no log entries, `displayErrorMsg()` shows the message.",
     "Manage Project Categories": "#11. The designer ticks 1-5 active categories for one of their projects. "
         "`IDPCategory.replaceLinks()` saves them, then customers whose interests match are found "
         "(`CustomerPreference.findCustomersByCategories()`) and the project's recommendations are refreshed. "

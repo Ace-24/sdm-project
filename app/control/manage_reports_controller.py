@@ -15,12 +15,12 @@ class ManageReportsController:
         return Report.getReportsByStatus(REPORT_PENDING)
 
     def getReportDetails(self, reportID):
-        """S1 - the report and the reported IDP."""
+        """The report and the reported IDP."""
         report = Report.getReport(reportID)
         return (report, IDP.getIDPDetails(report.idpID)) if report else (None, None)
 
     def processDecision(self, reportID, decision, managerID):
-        """Main flow steps 7-8 (+ A1 Warn, A2 Dismiss). Returns True if the report was closed."""
+        """Returns True if the report was closed."""
         self.errorMsg = None
         report = Report.getReport(reportID)
         if report is None or report.status != REPORT_PENDING:
@@ -31,10 +31,10 @@ class ManageReportsController:
             return False
         idp = IDP.getIDPDetails(report.idpID)
         if decision == DECISION_HIDE:
-            IDP.updateStatus(idp.idpID, IDP_HIDDEN)            # step 7
+            IDP.updateStatus(idp.idpID, IDP_HIDDEN)
         elif decision == DECISION_WARN:
-            self._sendWarning(idp.designerID, idp, report)     # A1
-        report.closeReport(decision, managerID)                # S2
+            self._sendWarning(idp.designerID, idp, report)
+        report.closeReport(decision, managerID)
         self._notifyOutcome(report, idp)
         return True
 

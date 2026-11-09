@@ -17,7 +17,7 @@ class IDPCategory:
 
     @staticmethod
     def replaceLinks(idpID, categoryIDs):
-        """Main flow step 6 - keep existing link dates, add new links, remove unticked ones."""
+        """Keep existing link dates, add new links, remove unticked ones."""
         db = get_db()
         current = set(IDPCategory.getCategoryIDs(idpID))
         wanted = set(categoryIDs)

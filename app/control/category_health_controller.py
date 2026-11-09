@@ -8,10 +8,10 @@ DAYS = 30
 
 class CategoryHealthController:
     def generateHealthReport(self):
-        """Main flow steps 2-5. Returns the CategoryHealth list, highest score first."""
+        """Returns the CategoryHealth list, highest score first."""
         categories = Category.getAllCategories()
-        results = IDP.getCategoryStatistics(categories, DAYS)          # S1
-        self._calculateHealthScores(results)                           # S2
+        results = IDP.getCategoryStatistics(categories, DAYS)
+        self._calculateHealthScores(results)
         return sorted(results, key=lambda h: (-h.healthScore, h.categoryName))
 
     @staticmethod
@@ -23,7 +23,7 @@ class CategoryHealthController:
             h.calculateScore(max_idps, max_interest, max_growth)
 
     def flagCategoryForReview(self, categoryID):
-        """A1 - only active categories can be flagged."""
+        """Only active categories can be flagged."""
         c = Category.findById(categoryID)
         if c is None or c.status != CATEGORY_ACTIVE:
             return False

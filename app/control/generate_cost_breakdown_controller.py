@@ -11,7 +11,7 @@ class GenerateCostBreakdownController:
         self.errorMsg = None
 
     def getRenovationItems(self):
-        """S1 - items of the active rule with their unit and unit rate."""
+        """Items of the active rule with their unit and unit rate."""
         return UnitRate.getActiveRates()
 
     def getStyles(self):
@@ -19,7 +19,7 @@ class GenerateCostBreakdownController:
         return sorted(rule.styleFactors) if rule else []
 
     def generateBreakdown(self, customerID, quantities, propertyType, style):
-        """Main flow steps 5-8. quantities maps item code -> number (blank items left out).
+        """quantities maps item code -> number (blank items left out).
         Returns the saved CostBreakdown, or None (with errorMsg)."""
         rule = EstimationRule.findActive()
         if rule is None:
@@ -32,18 +32,17 @@ class GenerateCostBreakdownController:
             return None
         factor = rule.getPropertyFactor(propertyType) * (rule.getStyleFactor(style) if style else 1.0)
         cb = CostBreakdown(None, customerID, rule.ruleID, propertyType, style or "Standard")
-        cb.addItems(quantities, {r.itemCode: r for r in rule.unitRates}, factor)    # S3
-        cb.calculateTotal()                                                          # S4
+        cb.addItems(quantities, {r.itemCode: r for r in rule.unitRates}, factor)
+        cb.calculateTotal()
         cb.saveBreakdown()
         cb.factor = factor
         return cb
 
-    # ---- S2: Validate Quantities ----
     def _validateQuantities(self, quantities, rule):
         self.errorMsg = None
         codes = {r.itemCode for r in rule.unitRates}
         if not quantities or any(code not in codes for code in quantities) \
                 or any(q is None or q <= 0 for q in quantities.values()):
-            self.errorMsg = "Please enter a positive quantity for at least one item"      # E1
+            self.errorMsg = "Please enter a positive quantity for at least one item"
             return False
         return True

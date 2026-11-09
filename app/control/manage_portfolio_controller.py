@@ -16,7 +16,6 @@ class ManagePortfolioController:
     def __init__(self):
         self.errorMsgs = []
 
-    # ---- S1 View Portfolio Projects / A3 View Archived ----
     def getPortfolio(self, designerID):
         """Active projects (plus any hidden by the Platform Manager, so the designer can see them)."""
         return IDP.getIDPsByStatus(designerID, [IDP_ACTIVE, IDP_HIDDEN])
@@ -33,7 +32,6 @@ class ManagePortfolioController:
         idp = IDP.getIDPDetails(idpID)
         return idp if idp is not None and idp.designerID == designerID else None
 
-    # ---- Main flow: edit ----
     def editIDP(self, idp, newPhotos=None, removePhotos=None, costItems=None):
         """Validate and save the edited IDP. newPhotos are uploaded files
         (objects with .filename, .save(), and a readable stream). If costItems are given,
@@ -57,7 +55,6 @@ class ManagePortfolioController:
             idp.updateIDP()
         return idp.idpID
 
-    # ---- Sub-flow S2: Validate Project Details ----
     def _validateIDPDetails(self, idp, newPhotos, costItems=None, requireItems=False):
         errors = []
         if not (idp.title or "").strip():
@@ -126,7 +123,6 @@ class ManagePortfolioController:
         fileStorage.save(os.path.join(folder, name))
         return name
 
-    # ---- A2 Archive / A4 Restore / A5 Delete ----
     def archiveIDP(self, idpID, designerID):
         idp = self.getIDP(idpID, designerID)
         if idp is None or idp.status != IDP_ACTIVE:

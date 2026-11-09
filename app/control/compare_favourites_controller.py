@@ -10,27 +10,25 @@ class CompareFavouritesController:
         self.errorMsg = None
 
     def getFavourites(self, customerID):
-        """S1 - View Favourites List."""
         return Favourite.findByCustomer(customerID)
 
     def compareFavourites(self, customerID, idpIDs):
-        """Main flow steps 5-8. Returns an IDPComparison, or None (with errorMsg)."""
+        """Returns an IDPComparison, or None (with errorMsg)."""
         idpIDs = list(dict.fromkeys(idpIDs))            # remove duplicates, keep order
         if not self._validateSelection(idpIDs):
             return None
         idps = Favourite.getSelectedIDPs(customerID, idpIDs)
         if len(idps) != len(idpIDs) or not all(i.isComparable() for i in idps):
-            self.errorMsg = "Please select 2 to 3 IDPs to compare"            # E1 (no longer available)
+            self.errorMsg = "Please select 2 to 3 IDPs to compare"
             return None
         comparison = IDPComparison(customerID)
         comparison.addIDPs(idps)
-        comparison.findBestValue()                                           # S3 + S4
+        comparison.findBestValue()
         return comparison
 
-    # ---- S2: Validate IDP Selection ----
     def _validateSelection(self, idpIDs):
         self.errorMsg = None
         if not (MIN_SELECT <= len(idpIDs) <= MAX_SELECT):
-            self.errorMsg = "Please select 2 to 3 IDPs to compare"           # E1
+            self.errorMsg = "Please select 2 to 3 IDPs to compare"
             return False
         return True

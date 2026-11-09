@@ -10,7 +10,7 @@ CSV_HEADER = ["Date", "Estimates", "Total Estimated Value (SGD)", "Average Estim
 
 class SalesReportRow:
     def __init__(self, day, estimatesCount=0, totalEstimatedValue=0.0, idpViews=0, shortlists=0):
-        self.day = day                                   # date
+        self.day = day
         self.estimatesCount = estimatesCount
         self.totalEstimatedValue = round(totalEstimatedValue, 2)
         self.averageEstimatedValue = self.calculateAverage()
@@ -26,7 +26,7 @@ class SalesReportRow:
 
     @staticmethod
     def findByDateRange(start, end):
-        """S2 - one row per day from start to end (dates, inclusive). Days with no activity are zero.
+        """One row per day from start to end (dates, inclusive). Days with no activity are zero.
         Reads saved cost breakdowns (#29), IDP views and favourites (shortlists)."""
         lo, hi = start.isoformat() + " 00:00:00", end.isoformat() + " 23:59:59"
         db = get_db()
@@ -68,7 +68,7 @@ class SalesReport:
         return round(self.totalEstimatedValue / self.totalEstimates, 2) if self.totalEstimates else 0.0
 
     def toCSV(self):
-        """S3 - header, one line per day, then a totals line."""
+        """Header, one line per day, then a totals line."""
         out = io.StringIO()
         writer = csv.writer(out, lineterminator="\n")
         writer.writerow(CSV_HEADER)

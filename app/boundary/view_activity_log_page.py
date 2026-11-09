@@ -12,18 +12,17 @@ class ViewActivityLogPg:
     def __init__(self):
         self.controller = ViewActivityLogController()
 
-    # ---- Search (S1) ----
     def searchAccount(self, keyword, profileName=""):
         """Lists every current account when the page opens; the keyword and role narrow it down."""
         accounts = self.controller.searchUserAccount(keyword or "", profileName)
-        return self.displayAccountList(keyword or "", profileName or "", accounts)
+        if accounts:
+            return self.displayAccountList(keyword or "", profileName or "", accounts)
+        return self.displayErrorMsg("No accounts found.", keyword=keyword or "", profileName=profileName or "")
 
-    def displayAccountList(self, keyword, profileName, accounts):
-        error = "No accounts found." if accounts == [] else None          # E1
+    def displayAccountList(self, keyword, profileName, accounts, error=None):
         return render_template("activity_search.html", keyword=keyword, role=profileName, roles=ALL_ROLES,
                                accounts=accounts, error=error)
 
-    # ---- View / filter the log ----
     def displayActivityLog(self, accountID, args):
         account = UserAccount.findById(accountID)
         if account is None:
@@ -33,20 +32,25 @@ class ViewActivityLogPg:
             logs = self.filterLog(accountID, filters["type"], filters["from"], filters["to"])
         else:
             logs = self.controller.viewActivityLog(accountID)
-        return self.displayLogList(account, logs, filters)
+        if logs:
+            return self.displayLogList(account, logs, filters)
+        msg = self.controller.errorMsg or ("No activity matches this filter." if any(filters.values())
+                                           else "No activity recorded for this account.")
+        return self.displayErrorMsg(msg, account=account, filters=filters)
 
     def filterLog(self, accountID, activityType, fromDate, toDate):
         return self.controller.filterActivityLog(accountID, activityType, fromDate, toDate)
 
-    def displayLogList(self, account, logs, filters):
-        error = self.controller.errorMsg
-        if error is None and logs == []:
-            error = "No activity recorded for this account." if not any(filters.values()) \
-                else "No activity matches this filter."                    # E2
-        return render_template("activity_log.html", account=account, logs=logs or [], filters=filters,
+    def displayLogList(self, account, logs, filters, error=None):
+        return render_template("activity_log.html", account=account, logs=logs, filters=filters,
                                types=ACTIVITY_TYPES, error=error)
 
-    # ---- A2: Export ----
+    def displayErrorMsg(self, msg, account=None, filters=None, keyword="", profileName=""):
+        """Show the message on the account search page, or on the account's log page."""
+        if account is None:
+            return self.displayAccountList(keyword, profileName, [], msg)
+        return self.displayLogList(account, [], filters or {}, msg)
+
     def clickExport(self, accountID, args):
         account = UserAccount.findById(accountID)
         if account is None:
@@ -56,7 +60,6 @@ class ViewActivityLogPg:
         return Response(csv_text, mimetype="text/csv", headers={
             "Content-Disposition": f"attachment; filename=activity_log_{account.username}.csv"})
 
-    # ---- A3: Suspend ----
     def clickSuspend(self, accountID):
         if self.controller.suspendUserAccount(accountID, g.user.accountID, request.remote_addr):
             flash("Account suspended.", "success")
@@ -100,5 +103,5 @@ def _reactivate(page, accountID):
 @bp.route("/<int:accountID>/reactivate", methods=["POST"])
 @role_required(USER_ADMIN)
 def clickReactivate(accountID):
-    """A4 - Reactivate a suspended account."""
+    """Reactivate a suspended account."""
     return _reactivate(ViewActivityLogPg(), accountID)

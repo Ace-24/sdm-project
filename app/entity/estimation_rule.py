@@ -13,9 +13,9 @@ class EstimationRule:
         self.createdBy = createdBy
         self.createdDate = createdDate
         self.isActive = isActive
-        self.unitRates = unitRates or []               # List<UnitRate>
-        self.propertyFactors = propertyFactors or {}   # Map<String, double>
-        self.styleFactors = styleFactors or {}         # Map<String, double>
+        self.unitRates = unitRates or []
+        self.propertyFactors = propertyFactors or {}
+        self.styleFactors = styleFactors or {}
 
     @staticmethod
     def _load(row):
@@ -32,7 +32,7 @@ class EstimationRule:
 
     @staticmethod
     def findActive():
-        """The rule currently in use (S1, and #29)."""
+        """The rule currently in use."""
         row = get_db().execute("SELECT * FROM estimation_rule WHERE is_active = 1").fetchone()
         return EstimationRule._load(row)
 
@@ -48,7 +48,7 @@ class EstimationRule:
         return self.styleFactors.get(style, 1.0)
 
     def saveRule(self):
-        """S3 + S4 - save the rule with its unit rates and factors as the active rule,
+        """Save the rule with its unit rates and factors as the active rule,
         and deactivate the previous one (all in one transaction)."""
         db = get_db()
         try:

@@ -23,11 +23,11 @@ class CategoryHealth:
         return round((recent - previous) / previous * 100, 1)
 
     def calculateScore(self, maxIDPs, maxInterest, maxGrowth):
-        """S2 - scale each measure 0-100 against the highest category, then
+        """Scale each measure 0-100 against the highest category, then
         score = 40% IDP score + 40% interest score + 20% growth score.
         Negative growth scores 0."""
         if self.idpCount == 0:
-            self.healthScore, self.healthStatus = 0.0, "No data"          # E1
+            self.healthScore, self.healthStatus = 0.0, "No data"
             return self.healthScore
         idp_score = self.idpCount / maxIDPs * 100 if maxIDPs else 0
         interest_score = self.interestCount / maxInterest * 100 if maxInterest else 0

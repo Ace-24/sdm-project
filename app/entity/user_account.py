@@ -49,7 +49,7 @@ class UserAccount:
 
     @staticmethod
     def checkUsernameExists(username, excludeID=None):
-        """#1 - True if the username is already used (not case-sensitive) by another account."""
+        """True if the username is already used (not case-sensitive) by another account."""
         row = get_db().execute("SELECT account_id FROM user_account WHERE username = ? COLLATE NOCASE",
                                ((username or "").strip(),)).fetchone()
         return row is not None and row[0] != excludeID
@@ -66,7 +66,7 @@ class UserAccount:
 
     @staticmethod
     def searchUserAccounts(keyword, profileName=None):
-        """#7 - accounts whose username, name or email contains the keyword, optionally
+        """Accounts whose username, name or email contains the keyword, optionally
         only one profile. An empty keyword returns every account."""
         like = f"%{(keyword or '').strip()}%"
         sql = UserAccount._SELECT + "WHERE (a.username LIKE ? OR a.name LIKE ? OR a.email LIKE ?) "
@@ -86,7 +86,7 @@ class UserAccount:
         return [r[0] for r in rows]
 
     def updateStatus(self, status):
-        """#7 A3 - e.g. suspend the account."""
+        """For example, suspend the account."""
         db = get_db()
         db.execute("UPDATE user_account SET status = ? WHERE account_id = ?", (status, self.accountID))
         db.commit()

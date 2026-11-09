@@ -12,7 +12,6 @@ class GenerateCostBreakdownPg:
         self.controller = GenerateCostBreakdownController()
 
     def displayCostBreakdownForm(self, form=None, error=None):
-        """Main flow 1-2."""
         return self.showItemList(self.controller.getRenovationItems(), form or {}, error)
 
     def showItemList(self, items, form, error):
@@ -20,7 +19,7 @@ class GenerateCostBreakdownPg:
                                property_types=PROPERTY_TYPES, styles=self.controller.getStyles())
 
     def clickGenerate(self, customerID, form):
-        """Main flow 4. Blank quantity boxes are ignored; anything typed must be a positive number."""
+        """Blank quantity boxes are ignored; anything typed must be a positive number."""
         quantities = {}
         for key, value in form.items():
             if key.startswith("qty:") and value.strip() != "":

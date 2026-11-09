@@ -35,7 +35,7 @@ class Report:
 
     @staticmethod
     def getReportsByStatus(status):
-        """Main flow step 2 - e.g. all pending reports, oldest first."""
+        """Reports with the given status, oldest first."""
         rows = get_db().execute(Report._SELECT + "WHERE r.status = ? ORDER BY r.reported_date, r.report_id",
                                 (status,)).fetchall()
         return [Report._fromRow(r) for r in rows]
@@ -45,7 +45,7 @@ class Report:
         return Report._fromRow(get_db().execute(Report._SELECT + "WHERE r.report_id = ?", (reportID,)).fetchone())
 
     def closeReport(self, decision, managerID):
-        """S2 - set status Closed and record the decision, manager and date."""
+        """Set status Closed and record the decision, manager and date."""
         self.status, self.decision, self.closedBy, self.closedDate = REPORT_CLOSED, decision, managerID, now_str()
         db = get_db()
         db.execute("UPDATE report SET status = ?, decision = ?, closed_by = ?, closed_date = ? WHERE report_id = ?",

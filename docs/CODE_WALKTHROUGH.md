@@ -188,7 +188,7 @@ Public page. `BrowseIDPController.searchIDPs()` asks `IDP.searchIDPs()` for acti
 - <<boundary>> `BrowseIDPPg` - [`app/boundary/browse_idp_page.py` L8-15](../app/boundary/browse_idp_page.py#L8-L15)
 - <<control>> `BrowseIDPController` - [`app/control/browse_idp_controller.py` L9-17](../app/control/browse_idp_controller.py#L9-L17)
 - <<entity>> `Category` - [`app/entity/category.py` L6-92](../app/entity/category.py#L6-L92)
-- <<entity>> `IDP` - [`app/entity/idp.py` L10-197](../app/entity/idp.py#L10-L197)
+- <<entity>> `IDP` - [`app/entity/idp.py` L10-195](../app/entity/idp.py#L10-L195)
 
 **Flow of each page (in call order)**
 
@@ -196,7 +196,7 @@ Public page. `BrowseIDPController.searchIDPs()` asks `IDP.searchIDPs()` for acti
 
 - <<boundary>> `BrowseIDPPg.displayBrowsePage()` - [`app/boundary/browse_idp_page.py` L12-15](../app/boundary/browse_idp_page.py#L12-L15)
   - <<control>> `BrowseIDPController.searchIDPs()` - [`app/control/browse_idp_controller.py` L13-17](../app/control/browse_idp_controller.py#L13-L17)
-    - <<entity>> `IDP.searchIDPs()` - [`app/entity/idp.py` L112-133](../app/entity/idp.py#L112-L133)
+    - <<entity>> `IDP.searchIDPs()` - [`app/entity/idp.py` L111-132](../app/entity/idp.py#L111-L132)
   - <<control>> `BrowseIDPController.getCategories()` - [`app/control/browse_idp_controller.py` L10-11](../app/control/browse_idp_controller.py#L10-L11)
     - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
   - page: `app/templates/browse.html`
@@ -232,7 +232,7 @@ Public page for one project. Only active projects are shown to the public (the d
 - <<entity>> `CompanyProfile` - [`app/entity/company_profile.py` L6-39](../app/entity/company_profile.py#L6-L39)
 - <<entity>> `EstimationRule` - [`app/entity/estimation_rule.py` L8-76](../app/entity/estimation_rule.py#L8-L76)
 - <<entity>> `Favourite` - [`app/entity/favourite.py` L5-50](../app/entity/favourite.py#L5-L50)
-- <<entity>> `IDP` - [`app/entity/idp.py` L10-197](../app/entity/idp.py#L10-L197)
+- <<entity>> `IDP` - [`app/entity/idp.py` L10-195](../app/entity/idp.py#L10-L195)
 - <<entity>> `IDPCostItem` - [`app/entity/idp_cost_item.py` L8-37](../app/entity/idp_cost_item.py#L8-L37)
 - <<entity>> `IDPView` - [`app/entity/idp_view.py` L6-19](../app/entity/idp_view.py#L6-L19)
 
@@ -294,41 +294,41 @@ Public page for one project. Only active projects are shown to the public (the d
 
 **Classes**
 
-- <<boundary>> `CreateUserAccountPg` - [`app/boundary/create_user_account_page.py` L11-41](../app/boundary/create_user_account_page.py#L11-L41)
-- <<control>> `CreateUserAccountController` - [`app/control/create_user_account_controller.py` L12-73](../app/control/create_user_account_controller.py#L12-L73)
+- <<boundary>> `CreateUserAccountPg` - [`app/boundary/create_user_account_page.py` L11-39](../app/boundary/create_user_account_page.py#L11-L39)
+- <<control>> `CreateUserAccountController` - [`app/control/create_user_account_controller.py` L12-69](../app/control/create_user_account_controller.py#L12-L69)
 - <<entity>> `Notification` - [`app/entity/notification.py` L6-27](../app/entity/notification.py#L6-L27)
 - <<entity>> `UserAccount` - [`app/entity/user_account.py` L8-115](../app/entity/user_account.py#L8-L115)
 - <<entity>> `UserProfile` - [`app/entity/user_profile.py` L6-63](../app/entity/user_profile.py#L6-L63)
 
 **Flow of each page (in call order)**
 
-**GET `/admin/accounts/create`** - route `displayCreateUAForm()` [`app/boundary/create_user_account_page.py` L44-47](../app/boundary/create_user_account_page.py#L44-L47)
+**GET `/admin/accounts/create`** - route `displayCreateUAForm()` [`app/boundary/create_user_account_page.py` L42-45](../app/boundary/create_user_account_page.py#L42-L45)
 
-- <<boundary>> `CreateUserAccountPg.displayCreateUAForm()` - [`app/boundary/create_user_account_page.py` L15-18](../app/boundary/create_user_account_page.py#L15-L18)
-  - <<control>> `CreateUserAccountController.getActiveProfiles()` - [`app/control/create_user_account_controller.py` L16-18](../app/control/create_user_account_controller.py#L16-L18)
+- <<boundary>> `CreateUserAccountPg.displayCreateUAForm()` - [`app/boundary/create_user_account_page.py` L15-17](../app/boundary/create_user_account_page.py#L15-L17)
+  - <<control>> `CreateUserAccountController.getActiveProfiles()` - [`app/control/create_user_account_controller.py` L16-17](../app/control/create_user_account_controller.py#L16-L17)
     - <<entity>> `UserProfile.getActiveProfiles()` - [`app/entity/user_profile.py` L24-30](../app/entity/user_profile.py#L24-L30)
-  - <<boundary>> `CreateUserAccountPg.showProfileList()` - [`app/boundary/create_user_account_page.py` L20-21](../app/boundary/create_user_account_page.py#L20-L21)
+  - <<boundary>> `CreateUserAccountPg.showProfileList()` - [`app/boundary/create_user_account_page.py` L19-20](../app/boundary/create_user_account_page.py#L19-L20)
     - page: `app/templates/create_user_account.html`
 
-**POST `/admin/accounts/create`** - route `submitUAForm()` [`app/boundary/create_user_account_page.py` L50-53](../app/boundary/create_user_account_page.py#L50-L53)
+**POST `/admin/accounts/create`** - route `submitUAForm()` [`app/boundary/create_user_account_page.py` L48-51](../app/boundary/create_user_account_page.py#L48-L51)
 
-- <<boundary>> `CreateUserAccountPg.submitUAForm()` - [`app/boundary/create_user_account_page.py` L23-35](../app/boundary/create_user_account_page.py#L23-L35)
-  - <<control>> `CreateUserAccountController.createUserAccount()` - [`app/control/create_user_account_controller.py` L20-29](../app/control/create_user_account_controller.py#L20-L29)
-    - <<control>> `CreateUserAccountController._validateAccountDetails()` - [`app/control/create_user_account_controller.py` L32-60](../app/control/create_user_account_controller.py#L32-L60)
-      - <<control>> `CreateUserAccountController.checkPasswordPolicy()` - [`app/control/create_user_account_controller.py` L62-65](../app/control/create_user_account_controller.py#L62-L65)
+- <<boundary>> `CreateUserAccountPg.submitUAForm()` - [`app/boundary/create_user_account_page.py` L22-33](../app/boundary/create_user_account_page.py#L22-L33)
+  - <<control>> `CreateUserAccountController.createUserAccount()` - [`app/control/create_user_account_controller.py` L19-28](../app/control/create_user_account_controller.py#L19-L28)
+    - <<control>> `CreateUserAccountController._validateAccountDetails()` - [`app/control/create_user_account_controller.py` L30-57](../app/control/create_user_account_controller.py#L30-L57)
+      - <<control>> `CreateUserAccountController.checkPasswordPolicy()` - [`app/control/create_user_account_controller.py` L59-62](../app/control/create_user_account_controller.py#L59-L62)
       - <<entity>> `UserProfile.getActiveProfiles()` - [`app/entity/user_profile.py` L24-30](../app/entity/user_profile.py#L24-L30)
       - <<entity>> `UserAccount.checkUsernameExists()` - [`app/entity/user_account.py` L50-55](../app/entity/user_account.py#L50-L55)
     - <<entity>> `UserAccount.setPassword()` - [`app/entity/user_account.py` L98-99](../app/entity/user_account.py#L98-L99)
     - <<entity>> `UserAccount.saveUserAccount()` - [`app/entity/user_account.py` L104-115](../app/entity/user_account.py#L104-L115)
-    - <<control>> `CreateUserAccountController._sendLoginCredentials()` - [`app/control/create_user_account_controller.py` L68-73](../app/control/create_user_account_controller.py#L68-L73)
+    - <<control>> `CreateUserAccountController._sendLoginCredentials()` - [`app/control/create_user_account_controller.py` L64-69](../app/control/create_user_account_controller.py#L64-L69)
       - <<entity>> `Notification.send()` - [`app/entity/notification.py` L14-19](../app/entity/notification.py#L14-L19)
-  - <<boundary>> `CreateUserAccountPg.displaySuccessPg()` - [`app/boundary/create_user_account_page.py` L37-38](../app/boundary/create_user_account_page.py#L37-L38)
+  - <<boundary>> `CreateUserAccountPg.displaySuccessPg()` - [`app/boundary/create_user_account_page.py` L35-36](../app/boundary/create_user_account_page.py#L35-L36)
     - page: `app/templates/create_user_account_success.html`
-  - <<boundary>> `CreateUserAccountPg.displayErrorMsg()` - [`app/boundary/create_user_account_page.py` L40-41](../app/boundary/create_user_account_page.py#L40-L41)
-    - <<boundary>> `CreateUserAccountPg.displayCreateUAForm()` - [`app/boundary/create_user_account_page.py` L15-18](../app/boundary/create_user_account_page.py#L15-L18)
-      - <<control>> `CreateUserAccountController.getActiveProfiles()` - [`app/control/create_user_account_controller.py` L16-18](../app/control/create_user_account_controller.py#L16-L18)
+  - <<boundary>> `CreateUserAccountPg.displayErrorMsg()` - [`app/boundary/create_user_account_page.py` L38-39](../app/boundary/create_user_account_page.py#L38-L39)
+    - <<boundary>> `CreateUserAccountPg.displayCreateUAForm()` - [`app/boundary/create_user_account_page.py` L15-17](../app/boundary/create_user_account_page.py#L15-L17)
+      - <<control>> `CreateUserAccountController.getActiveProfiles()` - [`app/control/create_user_account_controller.py` L16-17](../app/control/create_user_account_controller.py#L16-L17)
         - <<entity>> `UserProfile.getActiveProfiles()` - [`app/entity/user_profile.py` L24-30](../app/entity/user_profile.py#L24-L30)
-      - <<boundary>> `CreateUserAccountPg.showProfileList()` - [`app/boundary/create_user_account_page.py` L20-21](../app/boundary/create_user_account_page.py#L20-L21)
+      - <<boundary>> `CreateUserAccountPg.showProfileList()` - [`app/boundary/create_user_account_page.py` L19-20](../app/boundary/create_user_account_page.py#L19-L20)
         - page: `app/templates/create_user_account.html`
 
 **Unit tests:** `tests/test_us01_create_user_account.py`
@@ -350,54 +350,64 @@ Public page for one project. Only active projects are shown to the public (the d
 
 **Actor:** User Admin
 
-#7. All current accounts are listed when the page opens; the keyword and role narrow the list. Selecting an account shows its log newest first. The log can be filtered by type and date range (dates are validated), exported as CSV, and the account suspended or reactivated (both are logged as Status Change).
+#7. All current accounts are listed when the page opens; the keyword and role narrow the list. Selecting an account shows its log newest first. The log can be filtered by type and date range (dates are validated), exported as CSV, and the account suspended or reactivated (both are logged as Status Change). When there are no accounts or no log entries, `displayErrorMsg()` shows the message.
 
 **Classes**
 
-- <<boundary>> `ViewActivityLogPg` - [`app/boundary/view_activity_log_page.py` L11-65](../app/boundary/view_activity_log_page.py#L11-L65)
+- <<boundary>> `ViewActivityLogPg` - [`app/boundary/view_activity_log_page.py` L11-68](../app/boundary/view_activity_log_page.py#L11-L68)
 - <<control>> `ViewActivityLogController` - [`app/control/view_activity_log_controller.py` L10-69](../app/control/view_activity_log_controller.py#L10-L69)
 - <<entity>> `ActivityLog` - [`app/entity/activity_log.py` L6-59](../app/entity/activity_log.py#L6-L59)
 - <<entity>> `UserAccount` - [`app/entity/user_account.py` L8-115](../app/entity/user_account.py#L8-L115)
 
 **Flow of each page (in call order)**
 
-**GET `/admin/activity-log/`** - route `searchAccount()` [`app/boundary/view_activity_log_page.py` L68-71](../app/boundary/view_activity_log_page.py#L68-L71)
+**GET `/admin/activity-log/`** - route `searchAccount()` [`app/boundary/view_activity_log_page.py` L71-74](../app/boundary/view_activity_log_page.py#L71-L74)
 
-- <<boundary>> `ViewActivityLogPg.searchAccount()` - [`app/boundary/view_activity_log_page.py` L16-19](../app/boundary/view_activity_log_page.py#L16-L19)
+- <<boundary>> `ViewActivityLogPg.searchAccount()` - [`app/boundary/view_activity_log_page.py` L15-20](../app/boundary/view_activity_log_page.py#L15-L20)
   - <<control>> `ViewActivityLogController.searchUserAccount()` - [`app/control/view_activity_log_controller.py` L14-17](../app/control/view_activity_log_controller.py#L14-L17)
     - <<entity>> `UserAccount.searchUserAccounts()` - [`app/entity/user_account.py` L67-78](../app/entity/user_account.py#L67-L78)
-  - <<boundary>> `ViewActivityLogPg.displayAccountList()` - [`app/boundary/view_activity_log_page.py` L21-24](../app/boundary/view_activity_log_page.py#L21-L24)
+  - <<boundary>> `ViewActivityLogPg.displayAccountList()` - [`app/boundary/view_activity_log_page.py` L22-24](../app/boundary/view_activity_log_page.py#L22-L24)
     - page: `app/templates/activity_search.html`
+  - <<boundary>> `ViewActivityLogPg.displayErrorMsg()` - [`app/boundary/view_activity_log_page.py` L48-52](../app/boundary/view_activity_log_page.py#L48-L52)
+    - <<boundary>> `ViewActivityLogPg.displayAccountList()` - [`app/boundary/view_activity_log_page.py` L22-24](../app/boundary/view_activity_log_page.py#L22-L24)
+      - page: `app/templates/activity_search.html`
+    - <<boundary>> `ViewActivityLogPg.displayLogList()` - [`app/boundary/view_activity_log_page.py` L44-46](../app/boundary/view_activity_log_page.py#L44-L46)
+      - page: `app/templates/activity_log.html`
 
-**GET `/admin/activity-log/<int:accountID>`** - route `displayActivityLog()` [`app/boundary/view_activity_log_page.py` L74-77](../app/boundary/view_activity_log_page.py#L74-L77)
+**GET `/admin/activity-log/<int:accountID>`** - route `displayActivityLog()` [`app/boundary/view_activity_log_page.py` L77-80](../app/boundary/view_activity_log_page.py#L77-L80)
 
-- <<boundary>> `ViewActivityLogPg.displayActivityLog()` - [`app/boundary/view_activity_log_page.py` L27-36](../app/boundary/view_activity_log_page.py#L27-L36)
-  - <<boundary>> `ViewActivityLogPg.filterLog()` - [`app/boundary/view_activity_log_page.py` L38-39](../app/boundary/view_activity_log_page.py#L38-L39)
+- <<boundary>> `ViewActivityLogPg.displayActivityLog()` - [`app/boundary/view_activity_log_page.py` L26-39](../app/boundary/view_activity_log_page.py#L26-L39)
+  - <<boundary>> `ViewActivityLogPg.filterLog()` - [`app/boundary/view_activity_log_page.py` L41-42](../app/boundary/view_activity_log_page.py#L41-L42)
     - <<control>> `ViewActivityLogController.filterActivityLog()` - [`app/control/view_activity_log_controller.py` L23-38](../app/control/view_activity_log_controller.py#L23-L38)
       - <<entity>> `ActivityLog.getFilteredLog()` - [`app/entity/activity_log.py` L33-48](../app/entity/activity_log.py#L33-L48)
   - <<control>> `ViewActivityLogController.viewActivityLog()` - [`app/control/view_activity_log_controller.py` L19-21](../app/control/view_activity_log_controller.py#L19-L21)
     - <<entity>> `ActivityLog.getActivityLog()` - [`app/entity/activity_log.py` L26-31](../app/entity/activity_log.py#L26-L31)
-  - <<boundary>> `ViewActivityLogPg.displayLogList()` - [`app/boundary/view_activity_log_page.py` L41-47](../app/boundary/view_activity_log_page.py#L41-L47)
+  - <<boundary>> `ViewActivityLogPg.displayLogList()` - [`app/boundary/view_activity_log_page.py` L44-46](../app/boundary/view_activity_log_page.py#L44-L46)
     - page: `app/templates/activity_log.html`
+  - <<boundary>> `ViewActivityLogPg.displayErrorMsg()` - [`app/boundary/view_activity_log_page.py` L48-52](../app/boundary/view_activity_log_page.py#L48-L52)
+    - <<boundary>> `ViewActivityLogPg.displayAccountList()` - [`app/boundary/view_activity_log_page.py` L22-24](../app/boundary/view_activity_log_page.py#L22-L24)
+      - page: `app/templates/activity_search.html`
+    - <<boundary>> `ViewActivityLogPg.displayLogList()` - [`app/boundary/view_activity_log_page.py` L44-46](../app/boundary/view_activity_log_page.py#L44-L46)
+      - page: `app/templates/activity_log.html`
 
-**GET `/admin/activity-log/<int:accountID>/export`** - route `clickExport()` [`app/boundary/view_activity_log_page.py` L80-83](../app/boundary/view_activity_log_page.py#L80-L83)
+**GET `/admin/activity-log/<int:accountID>/export`** - route `clickExport()` [`app/boundary/view_activity_log_page.py` L83-86](../app/boundary/view_activity_log_page.py#L83-L86)
 
-- <<boundary>> `ViewActivityLogPg.clickExport()` - [`app/boundary/view_activity_log_page.py` L50-57](../app/boundary/view_activity_log_page.py#L50-L57)
+- <<boundary>> `ViewActivityLogPg.clickExport()` - [`app/boundary/view_activity_log_page.py` L54-61](../app/boundary/view_activity_log_page.py#L54-L61)
   - <<control>> `ViewActivityLogController.filterActivityLog()` - [`app/control/view_activity_log_controller.py` L23-38](../app/control/view_activity_log_controller.py#L23-L38)
     - <<entity>> `ActivityLog.getFilteredLog()` - [`app/entity/activity_log.py` L33-48](../app/entity/activity_log.py#L33-L48)
   - <<control>> `ViewActivityLogController.exportActivityLog()` - [`app/control/view_activity_log_controller.py` L40-47](../app/control/view_activity_log_controller.py#L40-L47)
 
-**POST `/admin/activity-log/<int:accountID>/reactivate`** - route `clickReactivate()` [`app/boundary/view_activity_log_page.py` L100-104](../app/boundary/view_activity_log_page.py#L100-L104)
+**POST `/admin/activity-log/<int:accountID>/reactivate`** - route `clickReactivate()` [`app/boundary/view_activity_log_page.py` L103-107](../app/boundary/view_activity_log_page.py#L103-L107)
 
-- helper `_reactivate()` - [`app/boundary/view_activity_log_page.py` L92-97](../app/boundary/view_activity_log_page.py#L92-L97)
+- helper `_reactivate()` - [`app/boundary/view_activity_log_page.py` L95-100](../app/boundary/view_activity_log_page.py#L95-L100)
   - <<control>> `ViewActivityLogController.reactivateUserAccount()` - [`app/control/view_activity_log_controller.py` L61-69](../app/control/view_activity_log_controller.py#L61-L69)
     - <<entity>> `UserAccount.findById()` - [`app/entity/user_account.py` L38-41](../app/entity/user_account.py#L38-L41)
     - <<entity>> `UserAccount.updateStatus()` - [`app/entity/user_account.py` L88-93](../app/entity/user_account.py#L88-L93)
     - <<entity>> `ActivityLog.record()` - [`app/entity/activity_log.py` L50-59](../app/entity/activity_log.py#L50-L59)
 
-**POST `/admin/activity-log/<int:accountID>/suspend`** - route `clickSuspend()` [`app/boundary/view_activity_log_page.py` L86-89](../app/boundary/view_activity_log_page.py#L86-L89)
+**POST `/admin/activity-log/<int:accountID>/suspend`** - route `clickSuspend()` [`app/boundary/view_activity_log_page.py` L89-92](../app/boundary/view_activity_log_page.py#L89-L92)
 
-- <<boundary>> `ViewActivityLogPg.clickSuspend()` - [`app/boundary/view_activity_log_page.py` L60-65](../app/boundary/view_activity_log_page.py#L60-L65)
+- <<boundary>> `ViewActivityLogPg.clickSuspend()` - [`app/boundary/view_activity_log_page.py` L63-68](../app/boundary/view_activity_log_page.py#L63-L68)
   - <<control>> `ViewActivityLogController.suspendUserAccount()` - [`app/control/view_activity_log_controller.py` L49-59](../app/control/view_activity_log_controller.py#L49-L59)
     - <<entity>> `UserAccount.findById()` - [`app/entity/user_account.py` L38-41](../app/entity/user_account.py#L38-L41)
     - <<entity>> `UserAccount.updateStatus()` - [`app/entity/user_account.py` L88-93](../app/entity/user_account.py#L88-L93)
@@ -424,6 +434,7 @@ Public page for one project. Only active projects are shown to the public (the d
 - `test_suspend_button` (L137-142)
 - `test_page_lists_current_accounts_when_opened` (L145-148)
 - `test_role_filter` (L151-153)
+- `test_page_uses_displayErrorMsg_for_both_messages` (L156-170)
 
 ## Edit User Account
 
@@ -559,7 +570,7 @@ The designer fills in company details (name required; UEN, phone, email and webs
 - <<boundary>> `DesignerPg` - [`app/boundary/company_profile_page.py` L33-42](../app/boundary/company_profile_page.py#L33-L42)
 - <<control>> `ManageCompanyProfileController` - [`app/control/manage_company_profile_controller.py` L14-50](../app/control/manage_company_profile_controller.py#L14-L50)
 - <<entity>> `CompanyProfile` - [`app/entity/company_profile.py` L6-39](../app/entity/company_profile.py#L6-L39)
-- <<entity>> `IDP` - [`app/entity/idp.py` L10-197](../app/entity/idp.py#L10-L197)
+- <<entity>> `IDP` - [`app/entity/idp.py` L10-195](../app/entity/idp.py#L10-L195)
 - <<entity>> `UserAccount` - [`app/entity/user_account.py` L8-115](../app/entity/user_account.py#L8-L115)
 
 **Flow of each page (in call order)**
@@ -589,7 +600,7 @@ The designer fills in company details (name required; UEN, phone, email and webs
   - <<control>> `ManageCompanyProfileController.getDesignerPage()` - [`app/control/manage_company_profile_controller.py` L44-50](../app/control/manage_company_profile_controller.py#L44-L50)
     - <<entity>> `UserAccount.findById()` - [`app/entity/user_account.py` L38-41](../app/entity/user_account.py#L38-L41)
     - <<entity>> `UserAccount.isActive()` - [`app/entity/user_account.py` L101-102](../app/entity/user_account.py#L101-L102)
-    - <<entity>> `IDP.getIDPsByStatus()` - [`app/entity/idp.py` L63-72](../app/entity/idp.py#L63-L72)
+    - <<entity>> `IDP.getIDPsByStatus()` - [`app/entity/idp.py` L62-71](../app/entity/idp.py#L62-L71)
     - <<entity>> `CompanyProfile.findByDesigner()` - [`app/entity/company_profile.py` L19-25](../app/entity/company_profile.py#L19-L25)
   - page: `app/templates/designer_page.html`
 
@@ -694,7 +705,7 @@ Input for #38. A logged-in customer clicks 'Report this project' on an active pr
 
 - <<boundary>> `SubmitReportPg` - [`app/boundary/submit_report_page.py` L9-47](../app/boundary/submit_report_page.py#L9-L47)
 - <<control>> `SubmitReportController` - [`app/control/submit_report_controller.py` L16-80](../app/control/submit_report_controller.py#L16-L80)
-- <<entity>> `IDP` - [`app/entity/idp.py` L10-197](../app/entity/idp.py#L10-L197)
+- <<entity>> `IDP` - [`app/entity/idp.py` L10-195](../app/entity/idp.py#L10-L195)
 - <<entity>> `Notification` - [`app/entity/notification.py` L6-27](../app/entity/notification.py#L6-L27)
 - <<entity>> `Report` - [`app/entity/report.py` L7-72](../app/entity/report.py#L7-L72)
 - <<entity>> `UserAccount` - [`app/entity/user_account.py` L8-115](../app/entity/user_account.py#L8-L115)
@@ -809,8 +820,8 @@ The period and date are validated and turned into a date range by `report_period
 
 **Classes**
 
-- <<boundary>> `ManageProjectCategoriesPg` - [`app/boundary/manage_project_categories_page.py` L11-55](../app/boundary/manage_project_categories_page.py#L11-L55)
-- <<control>> `ManageProjectCategoriesController` - [`app/control/manage_project_categories_controller.py` L14-59](../app/control/manage_project_categories_controller.py#L14-L59)
+- <<boundary>> `ManageProjectCategoriesPg` - [`app/boundary/manage_project_categories_page.py` L11-52](../app/boundary/manage_project_categories_page.py#L11-L52)
+- <<control>> `ManageProjectCategoriesController` - [`app/control/manage_project_categories_controller.py` L14-57](../app/control/manage_project_categories_controller.py#L14-L57)
 - <<entity>> `Category` - [`app/entity/category.py` L6-92](../app/entity/category.py#L6-L92)
 - <<entity>> `CustomerPreference` - [`app/entity/customer_preference.py` L6-41](../app/entity/customer_preference.py#L6-L41)
 - <<entity>> `IDPCategory` - [`app/entity/idp_category.py` L6-30](../app/entity/idp_category.py#L6-L30)
@@ -820,44 +831,44 @@ The period and date are validated and turned into a date range by `report_period
 
 **Flow of each page (in call order)**
 
-**GET `/designer/portfolio/<int:idpID>/categories`** - route `displayCategoryForm()` [`app/boundary/manage_project_categories_page.py` L68-71](../app/boundary/manage_project_categories_page.py#L68-L71)
+**GET `/designer/portfolio/<int:idpID>/categories`** - route `displayCategoryForm()` [`app/boundary/manage_project_categories_page.py` L65-68](../app/boundary/manage_project_categories_page.py#L65-L68)
 
-- <<boundary>> `ManageProjectCategoriesPg.displayCategoryForm()` - [`app/boundary/manage_project_categories_page.py` L21-27](../app/boundary/manage_project_categories_page.py#L21-L27)
+- <<boundary>> `ManageProjectCategoriesPg.displayCategoryForm()` - [`app/boundary/manage_project_categories_page.py` L21-26](../app/boundary/manage_project_categories_page.py#L21-L26)
   - <<boundary>> `ManageProjectCategoriesPg._ownIDP()` - [`app/boundary/manage_project_categories_page.py` L15-19](../app/boundary/manage_project_categories_page.py#L15-L19)
   - <<control>> `ManageProjectCategoriesController.getActiveCategories()` - [`app/control/manage_project_categories_controller.py` L21-22](../app/control/manage_project_categories_controller.py#L21-L22)
     - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
   - <<control>> `ManageProjectCategoriesController.getIDPCategories()` - [`app/control/manage_project_categories_controller.py` L18-19](../app/control/manage_project_categories_controller.py#L18-L19)
     - <<entity>> `IDPCategory.getCategoryIDs()` - [`app/entity/idp_category.py` L12-16](../app/entity/idp_category.py#L12-L16)
-  - <<boundary>> `ManageProjectCategoriesPg.showCategoryForm()` - [`app/boundary/manage_project_categories_page.py` L29-31](../app/boundary/manage_project_categories_page.py#L29-L31)
+  - <<boundary>> `ManageProjectCategoriesPg.showCategoryForm()` - [`app/boundary/manage_project_categories_page.py` L28-30](../app/boundary/manage_project_categories_page.py#L28-L30)
     - page: `app/templates/idp_categories.html`
 
-**POST `/designer/portfolio/<int:idpID>/categories`** - route `submitCategories()` [`app/boundary/manage_project_categories_page.py` L74-77](../app/boundary/manage_project_categories_page.py#L74-L77)
+**POST `/designer/portfolio/<int:idpID>/categories`** - route `submitCategories()` [`app/boundary/manage_project_categories_page.py` L71-74](../app/boundary/manage_project_categories_page.py#L71-L74)
 
-- <<boundary>> `ManageProjectCategoriesPg.submitCategories()` - [`app/boundary/manage_project_categories_page.py` L33-38](../app/boundary/manage_project_categories_page.py#L33-L38)
+- <<boundary>> `ManageProjectCategoriesPg.submitCategories()` - [`app/boundary/manage_project_categories_page.py` L32-36](../app/boundary/manage_project_categories_page.py#L32-L36)
   - <<boundary>> `ManageProjectCategoriesPg._ownIDP()` - [`app/boundary/manage_project_categories_page.py` L15-19](../app/boundary/manage_project_categories_page.py#L15-L19)
   - <<control>> `ManageProjectCategoriesController.updateIDPCategories()` - [`app/control/manage_project_categories_controller.py` L24-34](../app/control/manage_project_categories_controller.py#L24-L34)
-    - <<control>> `ManageProjectCategoriesController._validateCategories()` - [`app/control/manage_project_categories_controller.py` L37-43](../app/control/manage_project_categories_controller.py#L37-L43)
+    - <<control>> `ManageProjectCategoriesController._validateCategories()` - [`app/control/manage_project_categories_controller.py` L36-42](../app/control/manage_project_categories_controller.py#L36-L42)
       - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
     - <<entity>> `IDPCategory.replaceLinks()` - [`app/entity/idp_category.py` L18-30](../app/entity/idp_category.py#L18-L30)
     - <<entity>> `CustomerPreference.findCustomersByCategories()` - [`app/entity/customer_preference.py` L12-23](../app/entity/customer_preference.py#L12-L23)
     - <<entity>> `Recommendation.refreshRecommendations()` - [`app/entity/recommendation.py` L14-23](../app/entity/recommendation.py#L14-L23)
-  - <<boundary>> `ManageProjectCategoriesPg.displaySuccessPg()` - [`app/boundary/manage_project_categories_page.py` L40-43](../app/boundary/manage_project_categories_page.py#L40-L43)
+  - <<boundary>> `ManageProjectCategoriesPg.displaySuccessPg()` - [`app/boundary/manage_project_categories_page.py` L38-41](../app/boundary/manage_project_categories_page.py#L38-L41)
     - page: `app/templates/success.html`
-  - <<boundary>> `ManageProjectCategoriesPg.displayErrorMsg()` - [`app/boundary/manage_project_categories_page.py` L45-46](../app/boundary/manage_project_categories_page.py#L45-L46)
-    - <<boundary>> `ManageProjectCategoriesPg.displayCategoryForm()` - [`app/boundary/manage_project_categories_page.py` L21-27](../app/boundary/manage_project_categories_page.py#L21-L27)
+  - <<boundary>> `ManageProjectCategoriesPg.displayErrorMsg()` - [`app/boundary/manage_project_categories_page.py` L43-44](../app/boundary/manage_project_categories_page.py#L43-L44)
+    - <<boundary>> `ManageProjectCategoriesPg.displayCategoryForm()` - [`app/boundary/manage_project_categories_page.py` L21-26](../app/boundary/manage_project_categories_page.py#L21-L26)
       - <<boundary>> `ManageProjectCategoriesPg._ownIDP()` - [`app/boundary/manage_project_categories_page.py` L15-19](../app/boundary/manage_project_categories_page.py#L15-L19)
       - <<control>> `ManageProjectCategoriesController.getActiveCategories()` - [`app/control/manage_project_categories_controller.py` L21-22](../app/control/manage_project_categories_controller.py#L21-L22)
         - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
       - <<control>> `ManageProjectCategoriesController.getIDPCategories()` - [`app/control/manage_project_categories_controller.py` L18-19](../app/control/manage_project_categories_controller.py#L18-L19)
         - <<entity>> `IDPCategory.getCategoryIDs()` - [`app/entity/idp_category.py` L12-16](../app/entity/idp_category.py#L12-L16)
-      - <<boundary>> `ManageProjectCategoriesPg.showCategoryForm()` - [`app/boundary/manage_project_categories_page.py` L29-31](../app/boundary/manage_project_categories_page.py#L29-L31)
+      - <<boundary>> `ManageProjectCategoriesPg.showCategoryForm()` - [`app/boundary/manage_project_categories_page.py` L28-30](../app/boundary/manage_project_categories_page.py#L28-L30)
         - page: `app/templates/idp_categories.html`
 
-**POST `/designer/portfolio/<int:idpID>/categories/request`** - route `clickRequestCategory()` [`app/boundary/manage_project_categories_page.py` L80-83](../app/boundary/manage_project_categories_page.py#L80-L83)
+**POST `/designer/portfolio/<int:idpID>/categories/request`** - route `clickRequestCategory()` [`app/boundary/manage_project_categories_page.py` L77-80](../app/boundary/manage_project_categories_page.py#L77-L80)
 
-- <<boundary>> `ManageProjectCategoriesPg.clickRequestCategory()` - [`app/boundary/manage_project_categories_page.py` L48-55](../app/boundary/manage_project_categories_page.py#L48-L55)
+- <<boundary>> `ManageProjectCategoriesPg.clickRequestCategory()` - [`app/boundary/manage_project_categories_page.py` L46-52](../app/boundary/manage_project_categories_page.py#L46-L52)
   - <<boundary>> `ManageProjectCategoriesPg._ownIDP()` - [`app/boundary/manage_project_categories_page.py` L15-19](../app/boundary/manage_project_categories_page.py#L15-L19)
-  - <<control>> `ManageProjectCategoriesController.requestNewCategory()` - [`app/control/manage_project_categories_controller.py` L46-59](../app/control/manage_project_categories_controller.py#L46-L59)
+  - <<control>> `ManageProjectCategoriesController.requestNewCategory()` - [`app/control/manage_project_categories_controller.py` L44-57](../app/control/manage_project_categories_controller.py#L44-L57)
     - <<entity>> `Category.existsByName()` - [`app/entity/category.py` L35-39](../app/entity/category.py#L35-L39)
     - <<entity>> `UserAccount.findIDsByProfile()` - [`app/entity/user_account.py` L80-86](../app/entity/user_account.py#L80-L86)
     - <<entity>> `Notification.send()` - [`app/entity/notification.py` L14-19](../app/entity/notification.py#L14-L19)
@@ -885,8 +896,8 @@ The period and date are validated and turned into a date range by `report_period
 **Classes**
 
 - <<boundary>> `ManagePortfolioPg` - [`app/boundary/manage_portfolio_page.py` L39-117](../app/boundary/manage_portfolio_page.py#L39-L117)
-- <<control>> `ManagePortfolioController` - [`app/control/manage_portfolio_controller.py` L15-152](../app/control/manage_portfolio_controller.py#L15-L152)
-- <<entity>> `IDP` - [`app/entity/idp.py` L10-197](../app/entity/idp.py#L10-L197)
+- <<control>> `ManagePortfolioController` - [`app/control/manage_portfolio_controller.py` L15-148](../app/control/manage_portfolio_controller.py#L15-L148)
+- <<entity>> `IDP` - [`app/entity/idp.py` L10-195](../app/entity/idp.py#L10-L195)
 - <<entity>> `IDPCostItem` - [`app/entity/idp_cost_item.py` L8-37](../app/entity/idp_cost_item.py#L8-L37)
 
 **Flow of each page (in call order)**
@@ -894,34 +905,34 @@ The period and date are validated and turned into a date range by `report_period
 **GET `/designer/portfolio/`** - route `displayPortfolio()` [`app/boundary/manage_portfolio_page.py` L120-123](../app/boundary/manage_portfolio_page.py#L120-L123)
 
 - <<boundary>> `ManagePortfolioPg.displayPortfolio()` - [`app/boundary/manage_portfolio_page.py` L43-45](../app/boundary/manage_portfolio_page.py#L43-L45)
-  - <<control>> `ManagePortfolioController.getPortfolio()` - [`app/control/manage_portfolio_controller.py` L20-22](../app/control/manage_portfolio_controller.py#L20-L22)
-    - <<entity>> `IDP.getIDPsByStatus()` - [`app/entity/idp.py` L63-72](../app/entity/idp.py#L63-L72)
-  - <<control>> `ManagePortfolioController.getInterestCounts()` - [`app/control/manage_portfolio_controller.py` L24-26](../app/control/manage_portfolio_controller.py#L24-L26)
-    - <<entity>> `IDP.getInterestCounts()` - [`app/entity/idp.py` L135-142](../app/entity/idp.py#L135-L142)
+  - <<control>> `ManagePortfolioController.getPortfolio()` - [`app/control/manage_portfolio_controller.py` L19-21](../app/control/manage_portfolio_controller.py#L19-L21)
+    - <<entity>> `IDP.getIDPsByStatus()` - [`app/entity/idp.py` L62-71](../app/entity/idp.py#L62-L71)
+  - <<control>> `ManagePortfolioController.getInterestCounts()` - [`app/control/manage_portfolio_controller.py` L23-25](../app/control/manage_portfolio_controller.py#L23-L25)
+    - <<entity>> `IDP.getInterestCounts()` - [`app/entity/idp.py` L134-141](../app/entity/idp.py#L134-L141)
   - <<boundary>> `ManagePortfolioPg.displayIDPList()` - [`app/boundary/manage_portfolio_page.py` L51-52](../app/boundary/manage_portfolio_page.py#L51-L52)
     - page: `app/templates/portfolio.html`
 
 **POST `/designer/portfolio/<int:idpID>/archive`** - route `clickArchive()` [`app/boundary/manage_portfolio_page.py` L156-159](../app/boundary/manage_portfolio_page.py#L156-L159)
 
 - <<boundary>> `ManagePortfolioPg.clickArchive()` - [`app/boundary/manage_portfolio_page.py` L97-102](../app/boundary/manage_portfolio_page.py#L97-L102)
-  - <<control>> `ManagePortfolioController.archiveIDP()` - [`app/control/manage_portfolio_controller.py` L130-134](../app/control/manage_portfolio_controller.py#L130-L134)
-    - <<control>> `ManagePortfolioController.getIDP()` - [`app/control/manage_portfolio_controller.py` L31-34](../app/control/manage_portfolio_controller.py#L31-L34)
+  - <<control>> `ManagePortfolioController.archiveIDP()` - [`app/control/manage_portfolio_controller.py` L126-130](../app/control/manage_portfolio_controller.py#L126-L130)
+    - <<control>> `ManagePortfolioController.getIDP()` - [`app/control/manage_portfolio_controller.py` L30-33](../app/control/manage_portfolio_controller.py#L30-L33)
       - <<entity>> `IDP.getIDPDetails()` - [`app/entity/idp.py` L47-50](../app/entity/idp.py#L47-L50)
-    - <<entity>> `IDP.updateStatus()` - [`app/entity/idp.py` L144-155](../app/entity/idp.py#L144-L155)
+    - <<entity>> `IDP.updateStatus()` - [`app/entity/idp.py` L143-154](../app/entity/idp.py#L143-L154)
 
 **POST `/designer/portfolio/<int:idpID>/delete`** - route `clickDelete()` [`app/boundary/manage_portfolio_page.py` L168-171](../app/boundary/manage_portfolio_page.py#L168-L171)
 
 - <<boundary>> `ManagePortfolioPg.clickDelete()` - [`app/boundary/manage_portfolio_page.py` L111-117](../app/boundary/manage_portfolio_page.py#L111-L117)
-  - <<control>> `ManagePortfolioController.deleteIDP()` - [`app/control/manage_portfolio_controller.py` L142-152](../app/control/manage_portfolio_controller.py#L142-L152)
-    - <<control>> `ManagePortfolioController.getIDP()` - [`app/control/manage_portfolio_controller.py` L31-34](../app/control/manage_portfolio_controller.py#L31-L34)
+  - <<control>> `ManagePortfolioController.deleteIDP()` - [`app/control/manage_portfolio_controller.py` L138-148](../app/control/manage_portfolio_controller.py#L138-L148)
+    - <<control>> `ManagePortfolioController.getIDP()` - [`app/control/manage_portfolio_controller.py` L30-33](../app/control/manage_portfolio_controller.py#L30-L33)
       - <<entity>> `IDP.getIDPDetails()` - [`app/entity/idp.py` L47-50](../app/entity/idp.py#L47-L50)
-    - <<entity>> `IDP.hasReports()` - [`app/entity/idp.py` L157-159](../app/entity/idp.py#L157-L159)
-    - <<entity>> `IDP.deleteIDP()` - [`app/entity/idp.py` L161-169](../app/entity/idp.py#L161-L169)
+    - <<entity>> `IDP.hasReports()` - [`app/entity/idp.py` L156-158](../app/entity/idp.py#L156-L158)
+    - <<entity>> `IDP.deleteIDP()` - [`app/entity/idp.py` L160-168](../app/entity/idp.py#L160-L168)
 
 **GET `/designer/portfolio/<int:idpID>/edit`** - route `selectIDP()` [`app/boundary/manage_portfolio_page.py` L144-147](../app/boundary/manage_portfolio_page.py#L144-L147)
 
 - <<boundary>> `ManagePortfolioPg.selectIDP()` - [`app/boundary/manage_portfolio_page.py` L54-58](../app/boundary/manage_portfolio_page.py#L54-L58)
-  - <<control>> `ManagePortfolioController.getIDP()` - [`app/control/manage_portfolio_controller.py` L31-34](../app/control/manage_portfolio_controller.py#L31-L34)
+  - <<control>> `ManagePortfolioController.getIDP()` - [`app/control/manage_portfolio_controller.py` L30-33](../app/control/manage_portfolio_controller.py#L30-L33)
     - <<entity>> `IDP.getIDPDetails()` - [`app/entity/idp.py` L47-50](../app/entity/idp.py#L47-L50)
   - <<boundary>> `ManagePortfolioPg.displayEditForm()` - [`app/boundary/manage_portfolio_page.py` L60-64](../app/boundary/manage_portfolio_page.py#L60-L64)
     - page: `app/templates/idp_edit.html`
@@ -929,14 +940,14 @@ The period and date are validated and turned into a date range by `report_period
 **POST `/designer/portfolio/<int:idpID>/edit`** - route `submitIDP()` [`app/boundary/manage_portfolio_page.py` L150-153](../app/boundary/manage_portfolio_page.py#L150-L153)
 
 - <<boundary>> `ManagePortfolioPg.submitIDP()` - [`app/boundary/manage_portfolio_page.py` L80-88](../app/boundary/manage_portfolio_page.py#L80-L88)
-  - <<control>> `ManagePortfolioController.getIDP()` - [`app/control/manage_portfolio_controller.py` L31-34](../app/control/manage_portfolio_controller.py#L31-L34)
+  - <<control>> `ManagePortfolioController.getIDP()` - [`app/control/manage_portfolio_controller.py` L30-33](../app/control/manage_portfolio_controller.py#L30-L33)
     - <<entity>> `IDP.getIDPDetails()` - [`app/entity/idp.py` L47-50](../app/entity/idp.py#L47-L50)
-  - <<control>> `ManagePortfolioController.editIDP()` - [`app/control/manage_portfolio_controller.py` L37-47](../app/control/manage_portfolio_controller.py#L37-L47)
-    - <<control>> `ManagePortfolioController._validateIDPDetails()` - [`app/control/manage_portfolio_controller.py` L61-90](../app/control/manage_portfolio_controller.py#L61-L90)
-      - <<control>> `ManagePortfolioController._validateCostItems()` - [`app/control/manage_portfolio_controller.py` L92-109](../app/control/manage_portfolio_controller.py#L92-L109)
-      - <<control>> `ManagePortfolioController._fileSize()` - [`app/control/manage_portfolio_controller.py` L111-118](../app/control/manage_portfolio_controller.py#L111-L118)
-    - <<control>> `ManagePortfolioController._savePhoto()` - [`app/control/manage_portfolio_controller.py` L120-127](../app/control/manage_portfolio_controller.py#L120-L127)
-    - <<entity>> `IDP.updateIDP()` - [`app/entity/idp.py` L74-89](../app/entity/idp.py#L74-L89)
+  - <<control>> `ManagePortfolioController.editIDP()` - [`app/control/manage_portfolio_controller.py` L35-45](../app/control/manage_portfolio_controller.py#L35-L45)
+    - <<control>> `ManagePortfolioController._validateIDPDetails()` - [`app/control/manage_portfolio_controller.py` L58-87](../app/control/manage_portfolio_controller.py#L58-L87)
+      - <<control>> `ManagePortfolioController._validateCostItems()` - [`app/control/manage_portfolio_controller.py` L89-106](../app/control/manage_portfolio_controller.py#L89-L106)
+      - <<control>> `ManagePortfolioController._fileSize()` - [`app/control/manage_portfolio_controller.py` L108-115](../app/control/manage_portfolio_controller.py#L108-L115)
+    - <<control>> `ManagePortfolioController._savePhoto()` - [`app/control/manage_portfolio_controller.py` L117-124](../app/control/manage_portfolio_controller.py#L117-L124)
+    - <<entity>> `IDP.updateIDP()` - [`app/entity/idp.py` L73-88](../app/entity/idp.py#L73-L88)
   - <<boundary>> `ManagePortfolioPg.displaySuccessPg()` - [`app/boundary/manage_portfolio_page.py` L90-92](../app/boundary/manage_portfolio_page.py#L90-L92)
     - page: `app/templates/success.html`
   - <<boundary>> `ManagePortfolioPg.displayErrorMsg()` - [`app/boundary/manage_portfolio_page.py` L94-95](../app/boundary/manage_portfolio_page.py#L94-L95)
@@ -946,18 +957,18 @@ The period and date are validated and turned into a date range by `report_period
 **POST `/designer/portfolio/<int:idpID>/restore`** - route `clickRestore()` [`app/boundary/manage_portfolio_page.py` L162-165](../app/boundary/manage_portfolio_page.py#L162-L165)
 
 - <<boundary>> `ManagePortfolioPg.clickRestore()` - [`app/boundary/manage_portfolio_page.py` L104-109](../app/boundary/manage_portfolio_page.py#L104-L109)
-  - <<control>> `ManagePortfolioController.restoreIDP()` - [`app/control/manage_portfolio_controller.py` L136-140](../app/control/manage_portfolio_controller.py#L136-L140)
-    - <<control>> `ManagePortfolioController.getIDP()` - [`app/control/manage_portfolio_controller.py` L31-34](../app/control/manage_portfolio_controller.py#L31-L34)
+  - <<control>> `ManagePortfolioController.restoreIDP()` - [`app/control/manage_portfolio_controller.py` L132-136](../app/control/manage_portfolio_controller.py#L132-L136)
+    - <<control>> `ManagePortfolioController.getIDP()` - [`app/control/manage_portfolio_controller.py` L30-33](../app/control/manage_portfolio_controller.py#L30-L33)
       - <<entity>> `IDP.getIDPDetails()` - [`app/entity/idp.py` L47-50](../app/entity/idp.py#L47-L50)
-    - <<entity>> `IDP.updateStatus()` - [`app/entity/idp.py` L144-155](../app/entity/idp.py#L144-L155)
+    - <<entity>> `IDP.updateStatus()` - [`app/entity/idp.py` L143-154](../app/entity/idp.py#L143-L154)
 
 **GET `/designer/portfolio/archived`** - route `viewArchivedIDPs()` [`app/boundary/manage_portfolio_page.py` L126-129](../app/boundary/manage_portfolio_page.py#L126-L129)
 
 - <<boundary>> `ManagePortfolioPg.viewArchivedIDPs()` - [`app/boundary/manage_portfolio_page.py` L47-49](../app/boundary/manage_portfolio_page.py#L47-L49)
-  - <<control>> `ManagePortfolioController.getArchivedIDPs()` - [`app/control/manage_portfolio_controller.py` L28-29](../app/control/manage_portfolio_controller.py#L28-L29)
-    - <<entity>> `IDP.getIDPsByStatus()` - [`app/entity/idp.py` L63-72](../app/entity/idp.py#L63-L72)
-  - <<control>> `ManagePortfolioController.getInterestCounts()` - [`app/control/manage_portfolio_controller.py` L24-26](../app/control/manage_portfolio_controller.py#L24-L26)
-    - <<entity>> `IDP.getInterestCounts()` - [`app/entity/idp.py` L135-142](../app/entity/idp.py#L135-L142)
+  - <<control>> `ManagePortfolioController.getArchivedIDPs()` - [`app/control/manage_portfolio_controller.py` L27-28](../app/control/manage_portfolio_controller.py#L27-L28)
+    - <<entity>> `IDP.getIDPsByStatus()` - [`app/entity/idp.py` L62-71](../app/entity/idp.py#L62-L71)
+  - <<control>> `ManagePortfolioController.getInterestCounts()` - [`app/control/manage_portfolio_controller.py` L23-25](../app/control/manage_portfolio_controller.py#L23-L25)
+    - <<entity>> `IDP.getInterestCounts()` - [`app/entity/idp.py` L134-141](../app/entity/idp.py#L134-L141)
   - <<boundary>> `ManagePortfolioPg.displayIDPList()` - [`app/boundary/manage_portfolio_page.py` L51-52](../app/boundary/manage_portfolio_page.py#L51-L52)
     - page: `app/templates/portfolio.html`
 
@@ -970,13 +981,13 @@ The period and date are validated and turned into a date range by `report_period
 **POST `/designer/portfolio/new`** - route `submitNewIDP()` [`app/boundary/manage_portfolio_page.py` L138-141](../app/boundary/manage_portfolio_page.py#L138-L141)
 
 - <<boundary>> `ManagePortfolioPg.submitNewIDP()` - [`app/boundary/manage_portfolio_page.py` L69-78](../app/boundary/manage_portfolio_page.py#L69-L78)
-  - <<control>> `ManagePortfolioController.createIDP()` - [`app/control/manage_portfolio_controller.py` L49-58](../app/control/manage_portfolio_controller.py#L49-L58)
-    - <<control>> `ManagePortfolioController._validateIDPDetails()` - [`app/control/manage_portfolio_controller.py` L61-90](../app/control/manage_portfolio_controller.py#L61-L90)
-      - <<control>> `ManagePortfolioController._validateCostItems()` - [`app/control/manage_portfolio_controller.py` L92-109](../app/control/manage_portfolio_controller.py#L92-L109)
-      - <<control>> `ManagePortfolioController._fileSize()` - [`app/control/manage_portfolio_controller.py` L111-118](../app/control/manage_portfolio_controller.py#L111-L118)
-    - <<entity>> `IDP.createIDP()` - [`app/entity/idp.py` L91-106](../app/entity/idp.py#L91-L106)
-    - <<control>> `ManagePortfolioController._savePhoto()` - [`app/control/manage_portfolio_controller.py` L120-127](../app/control/manage_portfolio_controller.py#L120-L127)
-    - <<entity>> `IDP.updateIDP()` - [`app/entity/idp.py` L74-89](../app/entity/idp.py#L74-L89)
+  - <<control>> `ManagePortfolioController.createIDP()` - [`app/control/manage_portfolio_controller.py` L47-56](../app/control/manage_portfolio_controller.py#L47-L56)
+    - <<control>> `ManagePortfolioController._validateIDPDetails()` - [`app/control/manage_portfolio_controller.py` L58-87](../app/control/manage_portfolio_controller.py#L58-L87)
+      - <<control>> `ManagePortfolioController._validateCostItems()` - [`app/control/manage_portfolio_controller.py` L89-106](../app/control/manage_portfolio_controller.py#L89-L106)
+      - <<control>> `ManagePortfolioController._fileSize()` - [`app/control/manage_portfolio_controller.py` L108-115](../app/control/manage_portfolio_controller.py#L108-L115)
+    - <<entity>> `IDP.createIDP()` - [`app/entity/idp.py` L90-105](../app/entity/idp.py#L90-L105)
+    - <<control>> `ManagePortfolioController._savePhoto()` - [`app/control/manage_portfolio_controller.py` L117-124](../app/control/manage_portfolio_controller.py#L117-L124)
+    - <<entity>> `IDP.updateIDP()` - [`app/entity/idp.py` L73-88](../app/entity/idp.py#L73-L88)
   - page: `app/templates/success.html`
   - <<boundary>> `ManagePortfolioPg.displayEditForm()` - [`app/boundary/manage_portfolio_page.py` L60-64](../app/boundary/manage_portfolio_page.py#L60-L64)
     - page: `app/templates/idp_edit.html`
@@ -1013,38 +1024,38 @@ The period and date are validated and turned into a date range by `report_period
 
 **Classes**
 
-- <<boundary>> `CompareFavouritesPg` - [`app/boundary/compare_favourites_page.py` L10-32](../app/boundary/compare_favourites_page.py#L10-L32)
-- <<control>> `CompareFavouritesController` - [`app/control/compare_favourites_controller.py` L8-36](../app/control/compare_favourites_controller.py#L8-L36)
+- <<boundary>> `CompareFavouritesPg` - [`app/boundary/compare_favourites_page.py` L10-30](../app/boundary/compare_favourites_page.py#L10-L30)
+- <<control>> `CompareFavouritesController` - [`app/control/compare_favourites_controller.py` L8-34](../app/control/compare_favourites_controller.py#L8-L34)
 - <<entity>> `Favourite` - [`app/entity/favourite.py` L5-50](../app/entity/favourite.py#L5-L50)
-- <<entity>> `IDP` - [`app/entity/idp.py` L10-197](../app/entity/idp.py#L10-L197)
+- <<entity>> `IDP` - [`app/entity/idp.py` L10-195](../app/entity/idp.py#L10-L195)
 - <<entity>> `IDPComparison` - [`app/entity/idp_comparison.py` L4-17](../app/entity/idp_comparison.py#L4-L17)
 
 **Flow of each page (in call order)**
 
-**GET `/customer/favourites/`** - route `displayFavourites()` [`app/boundary/compare_favourites_page.py` L39-42](../app/boundary/compare_favourites_page.py#L39-L42)
+**GET `/customer/favourites/`** - route `displayFavourites()` [`app/boundary/compare_favourites_page.py` L37-40](../app/boundary/compare_favourites_page.py#L37-L40)
 
-- <<boundary>> `CompareFavouritesPg.displayFavourites()` - [`app/boundary/compare_favourites_page.py` L14-16](../app/boundary/compare_favourites_page.py#L14-L16)
-  - <<control>> `CompareFavouritesController.getFavourites()` - [`app/control/compare_favourites_controller.py` L12-14](../app/control/compare_favourites_controller.py#L12-L14)
+- <<boundary>> `CompareFavouritesPg.displayFavourites()` - [`app/boundary/compare_favourites_page.py` L14-15](../app/boundary/compare_favourites_page.py#L14-L15)
+  - <<control>> `CompareFavouritesController.getFavourites()` - [`app/control/compare_favourites_controller.py` L12-13](../app/control/compare_favourites_controller.py#L12-L13)
     - <<entity>> `Favourite.findByCustomer()` - [`app/entity/favourite.py` L13-22](../app/entity/favourite.py#L13-L22)
-  - <<boundary>> `CompareFavouritesPg.displayFavouriteList()` - [`app/boundary/compare_favourites_page.py` L18-19](../app/boundary/compare_favourites_page.py#L18-L19)
+  - <<boundary>> `CompareFavouritesPg.displayFavouriteList()` - [`app/boundary/compare_favourites_page.py` L17-18](../app/boundary/compare_favourites_page.py#L17-L18)
     - page: `app/templates/favourites.html`
 
-**POST `/customer/favourites/compare`** - route `clickCompare()` [`app/boundary/compare_favourites_page.py` L45-48](../app/boundary/compare_favourites_page.py#L45-L48)
+**POST `/customer/favourites/compare`** - route `clickCompare()` [`app/boundary/compare_favourites_page.py` L43-46](../app/boundary/compare_favourites_page.py#L43-L46)
 
-- <<boundary>> `CompareFavouritesPg.clickCompare()` - [`app/boundary/compare_favourites_page.py` L21-26](../app/boundary/compare_favourites_page.py#L21-L26)
-  - <<control>> `CompareFavouritesController.compareFavourites()` - [`app/control/compare_favourites_controller.py` L16-28](../app/control/compare_favourites_controller.py#L16-L28)
-    - <<control>> `CompareFavouritesController._validateSelection()` - [`app/control/compare_favourites_controller.py` L31-36](../app/control/compare_favourites_controller.py#L31-L36)
+- <<boundary>> `CompareFavouritesPg.clickCompare()` - [`app/boundary/compare_favourites_page.py` L20-24](../app/boundary/compare_favourites_page.py#L20-L24)
+  - <<control>> `CompareFavouritesController.compareFavourites()` - [`app/control/compare_favourites_controller.py` L15-27](../app/control/compare_favourites_controller.py#L15-L27)
+    - <<control>> `CompareFavouritesController._validateSelection()` - [`app/control/compare_favourites_controller.py` L29-34](../app/control/compare_favourites_controller.py#L29-L34)
     - <<entity>> `Favourite.getSelectedIDPs()` - [`app/entity/favourite.py` L24-28](../app/entity/favourite.py#L24-L28)
     - <<entity>> `IDP.isComparable()` - [`app/entity/idp.py` L52-54](../app/entity/idp.py#L52-L54)
     - <<entity>> `IDPComparison.addIDPs()` - [`app/entity/idp_comparison.py` L10-11](../app/entity/idp_comparison.py#L10-L11)
     - <<entity>> `IDPComparison.findBestValue()` - [`app/entity/idp_comparison.py` L13-17](../app/entity/idp_comparison.py#L13-L17)
-  - <<boundary>> `CompareFavouritesPg.displayErrorMsg()` - [`app/boundary/compare_favourites_page.py` L31-32](../app/boundary/compare_favourites_page.py#L31-L32)
-    - <<boundary>> `CompareFavouritesPg.displayFavourites()` - [`app/boundary/compare_favourites_page.py` L14-16](../app/boundary/compare_favourites_page.py#L14-L16)
-      - <<control>> `CompareFavouritesController.getFavourites()` - [`app/control/compare_favourites_controller.py` L12-14](../app/control/compare_favourites_controller.py#L12-L14)
+  - <<boundary>> `CompareFavouritesPg.displayErrorMsg()` - [`app/boundary/compare_favourites_page.py` L29-30](../app/boundary/compare_favourites_page.py#L29-L30)
+    - <<boundary>> `CompareFavouritesPg.displayFavourites()` - [`app/boundary/compare_favourites_page.py` L14-15](../app/boundary/compare_favourites_page.py#L14-L15)
+      - <<control>> `CompareFavouritesController.getFavourites()` - [`app/control/compare_favourites_controller.py` L12-13](../app/control/compare_favourites_controller.py#L12-L13)
         - <<entity>> `Favourite.findByCustomer()` - [`app/entity/favourite.py` L13-22](../app/entity/favourite.py#L13-L22)
-      - <<boundary>> `CompareFavouritesPg.displayFavouriteList()` - [`app/boundary/compare_favourites_page.py` L18-19](../app/boundary/compare_favourites_page.py#L18-L19)
+      - <<boundary>> `CompareFavouritesPg.displayFavouriteList()` - [`app/boundary/compare_favourites_page.py` L17-18](../app/boundary/compare_favourites_page.py#L17-L18)
         - page: `app/templates/favourites.html`
-  - <<boundary>> `CompareFavouritesPg.displayComparison()` - [`app/boundary/compare_favourites_page.py` L28-29](../app/boundary/compare_favourites_page.py#L28-L29)
+  - <<boundary>> `CompareFavouritesPg.displayComparison()` - [`app/boundary/compare_favourites_page.py` L26-27](../app/boundary/compare_favourites_page.py#L26-L27)
     - page: `app/templates/compare.html`
 
 **Unit tests:** `tests/test_us27_compare_favourites.py`
@@ -1069,44 +1080,44 @@ The period and date are validated and turned into a date range by `report_period
 
 **Classes**
 
-- <<boundary>> `GenerateCostBreakdownPg` - [`app/boundary/cost_breakdown_page.py` L10-41](../app/boundary/cost_breakdown_page.py#L10-L41)
-- <<control>> `GenerateCostBreakdownController` - [`app/control/generate_cost_breakdown_controller.py` L9-49](../app/control/generate_cost_breakdown_controller.py#L9-L49)
+- <<boundary>> `GenerateCostBreakdownPg` - [`app/boundary/cost_breakdown_page.py` L10-40](../app/boundary/cost_breakdown_page.py#L10-L40)
+- <<control>> `GenerateCostBreakdownController` - [`app/control/generate_cost_breakdown_controller.py` L9-48](../app/control/generate_cost_breakdown_controller.py#L9-L48)
 - <<entity>> `CostBreakdown` - [`app/entity/cost_breakdown.py` L22-73](../app/entity/cost_breakdown.py#L22-L73)
 - <<entity>> `EstimationRule` - [`app/entity/estimation_rule.py` L8-76](../app/entity/estimation_rule.py#L8-L76)
 - <<entity>> `UnitRate` - [`app/entity/unit_rate.py` L5-42](../app/entity/unit_rate.py#L5-L42)
 
 **Flow of each page (in call order)**
 
-**GET `/customer/cost-breakdown/`** - route `displayCostBreakdownForm()` [`app/boundary/cost_breakdown_page.py` L44-47](../app/boundary/cost_breakdown_page.py#L44-L47)
+**GET `/customer/cost-breakdown/`** - route `displayCostBreakdownForm()` [`app/boundary/cost_breakdown_page.py` L43-46](../app/boundary/cost_breakdown_page.py#L43-L46)
 
-- <<boundary>> `GenerateCostBreakdownPg.displayCostBreakdownForm()` - [`app/boundary/cost_breakdown_page.py` L14-16](../app/boundary/cost_breakdown_page.py#L14-L16)
+- <<boundary>> `GenerateCostBreakdownPg.displayCostBreakdownForm()` - [`app/boundary/cost_breakdown_page.py` L14-15](../app/boundary/cost_breakdown_page.py#L14-L15)
   - <<control>> `GenerateCostBreakdownController.getRenovationItems()` - [`app/control/generate_cost_breakdown_controller.py` L13-15](../app/control/generate_cost_breakdown_controller.py#L13-L15)
     - <<entity>> `UnitRate.getActiveRates()` - [`app/entity/unit_rate.py` L25-31](../app/entity/unit_rate.py#L25-L31)
-  - <<boundary>> `GenerateCostBreakdownPg.showItemList()` - [`app/boundary/cost_breakdown_page.py` L18-20](../app/boundary/cost_breakdown_page.py#L18-L20)
+  - <<boundary>> `GenerateCostBreakdownPg.showItemList()` - [`app/boundary/cost_breakdown_page.py` L17-19](../app/boundary/cost_breakdown_page.py#L17-L19)
     - <<control>> `GenerateCostBreakdownController.getStyles()` - [`app/control/generate_cost_breakdown_controller.py` L17-19](../app/control/generate_cost_breakdown_controller.py#L17-L19)
       - <<entity>> `EstimationRule.findActive()` - [`app/entity/estimation_rule.py` L33-37](../app/entity/estimation_rule.py#L33-L37)
     - page: `app/templates/cost_breakdown.html`
 
-**POST `/customer/cost-breakdown/`** - route `clickGenerate()` [`app/boundary/cost_breakdown_page.py` L50-53](../app/boundary/cost_breakdown_page.py#L50-L53)
+**POST `/customer/cost-breakdown/`** - route `clickGenerate()` [`app/boundary/cost_breakdown_page.py` L49-52](../app/boundary/cost_breakdown_page.py#L49-L52)
 
-- <<boundary>> `GenerateCostBreakdownPg.clickGenerate()` - [`app/boundary/cost_breakdown_page.py` L22-35](../app/boundary/cost_breakdown_page.py#L22-L35)
+- <<boundary>> `GenerateCostBreakdownPg.clickGenerate()` - [`app/boundary/cost_breakdown_page.py` L21-34](../app/boundary/cost_breakdown_page.py#L21-L34)
   - <<control>> `GenerateCostBreakdownController.generateBreakdown()` - [`app/control/generate_cost_breakdown_controller.py` L21-39](../app/control/generate_cost_breakdown_controller.py#L21-L39)
     - <<entity>> `EstimationRule.findActive()` - [`app/entity/estimation_rule.py` L33-37](../app/entity/estimation_rule.py#L33-L37)
-    - <<control>> `GenerateCostBreakdownController._validateQuantities()` - [`app/control/generate_cost_breakdown_controller.py` L42-49](../app/control/generate_cost_breakdown_controller.py#L42-L49)
+    - <<control>> `GenerateCostBreakdownController._validateQuantities()` - [`app/control/generate_cost_breakdown_controller.py` L41-48](../app/control/generate_cost_breakdown_controller.py#L41-L48)
     - <<entity>> `EstimationRule.getPropertyFactor()` - [`app/entity/estimation_rule.py` L44-45](../app/entity/estimation_rule.py#L44-L45)
     - <<entity>> `EstimationRule.getStyleFactor()` - [`app/entity/estimation_rule.py` L47-48](../app/entity/estimation_rule.py#L47-L48)
     - <<entity>> `CostBreakdown.addItems()` - [`app/entity/cost_breakdown.py` L38-42](../app/entity/cost_breakdown.py#L38-L42)
     - <<entity>> `CostBreakdown.calculateTotal()` - [`app/entity/cost_breakdown.py` L52-57](../app/entity/cost_breakdown.py#L52-L57)
     - <<entity>> `CostBreakdown.saveBreakdown()` - [`app/entity/cost_breakdown.py` L59-73](../app/entity/cost_breakdown.py#L59-L73)
-  - <<boundary>> `GenerateCostBreakdownPg.displayErrorMsg()` - [`app/boundary/cost_breakdown_page.py` L40-41](../app/boundary/cost_breakdown_page.py#L40-L41)
-    - <<boundary>> `GenerateCostBreakdownPg.displayCostBreakdownForm()` - [`app/boundary/cost_breakdown_page.py` L14-16](../app/boundary/cost_breakdown_page.py#L14-L16)
+  - <<boundary>> `GenerateCostBreakdownPg.displayErrorMsg()` - [`app/boundary/cost_breakdown_page.py` L39-40](../app/boundary/cost_breakdown_page.py#L39-L40)
+    - <<boundary>> `GenerateCostBreakdownPg.displayCostBreakdownForm()` - [`app/boundary/cost_breakdown_page.py` L14-15](../app/boundary/cost_breakdown_page.py#L14-L15)
       - <<control>> `GenerateCostBreakdownController.getRenovationItems()` - [`app/control/generate_cost_breakdown_controller.py` L13-15](../app/control/generate_cost_breakdown_controller.py#L13-L15)
         - <<entity>> `UnitRate.getActiveRates()` - [`app/entity/unit_rate.py` L25-31](../app/entity/unit_rate.py#L25-L31)
-      - <<boundary>> `GenerateCostBreakdownPg.showItemList()` - [`app/boundary/cost_breakdown_page.py` L18-20](../app/boundary/cost_breakdown_page.py#L18-L20)
+      - <<boundary>> `GenerateCostBreakdownPg.showItemList()` - [`app/boundary/cost_breakdown_page.py` L17-19](../app/boundary/cost_breakdown_page.py#L17-L19)
         - <<control>> `GenerateCostBreakdownController.getStyles()` - [`app/control/generate_cost_breakdown_controller.py` L17-19](../app/control/generate_cost_breakdown_controller.py#L17-L19)
           - <<entity>> `EstimationRule.findActive()` - [`app/entity/estimation_rule.py` L33-37](../app/entity/estimation_rule.py#L33-L37)
         - page: `app/templates/cost_breakdown.html`
-  - <<boundary>> `GenerateCostBreakdownPg.displayBreakdown()` - [`app/boundary/cost_breakdown_page.py` L37-38](../app/boundary/cost_breakdown_page.py#L37-L38)
+  - <<boundary>> `GenerateCostBreakdownPg.displayBreakdown()` - [`app/boundary/cost_breakdown_page.py` L36-37](../app/boundary/cost_breakdown_page.py#L36-L37)
     - page: `app/templates/cost_breakdown_result.html`
 
 **Unit tests:** `tests/test_us29_generate_cost_breakdown.py`
@@ -1134,7 +1145,7 @@ The period and date are validated and turned into a date range by `report_period
 
 - <<boundary>> `ManageReportsPg` - [`app/boundary/manage_reports_page.py` L10-40](../app/boundary/manage_reports_page.py#L10-L40)
 - <<control>> `ManageReportsController` - [`app/control/manage_reports_controller.py` L10-56](../app/control/manage_reports_controller.py#L10-L56)
-- <<entity>> `IDP` - [`app/entity/idp.py` L10-197](../app/entity/idp.py#L10-L197)
+- <<entity>> `IDP` - [`app/entity/idp.py` L10-195](../app/entity/idp.py#L10-L195)
 - <<entity>> `Notification` - [`app/entity/notification.py` L6-27](../app/entity/notification.py#L6-L27)
 - <<entity>> `Report` - [`app/entity/report.py` L7-72](../app/entity/report.py#L7-L72)
 
@@ -1163,7 +1174,7 @@ The period and date are validated and turned into a date range by `report_period
   - <<control>> `ManageReportsController.processDecision()` - [`app/control/manage_reports_controller.py` L22-39](../app/control/manage_reports_controller.py#L22-L39)
     - <<entity>> `Report.getReport()` - [`app/entity/report.py` L43-45](../app/entity/report.py#L43-L45)
     - <<entity>> `IDP.getIDPDetails()` - [`app/entity/idp.py` L47-50](../app/entity/idp.py#L47-L50)
-    - <<entity>> `IDP.updateStatus()` - [`app/entity/idp.py` L144-155](../app/entity/idp.py#L144-L155)
+    - <<entity>> `IDP.updateStatus()` - [`app/entity/idp.py` L143-154](../app/entity/idp.py#L143-L154)
     - <<control>> `ManageReportsController._sendWarning()` - [`app/control/manage_reports_controller.py` L41-45](../app/control/manage_reports_controller.py#L41-L45)
       - <<entity>> `Notification.send()` - [`app/entity/notification.py` L14-19](../app/entity/notification.py#L14-L19)
     - <<entity>> `Report.closeReport()` - [`app/entity/report.py` L47-54](../app/entity/report.py#L47-L54)
@@ -1207,7 +1218,7 @@ The period and date are validated and turned into a date range by `report_period
 - <<control>> `CategoryHealthController` - [`app/control/category_health_controller.py` L9-30](../app/control/category_health_controller.py#L9-L30)
 - <<entity>> `Category` - [`app/entity/category.py` L6-92](../app/entity/category.py#L6-L92)
 - <<entity>> `CategoryHealth` - [`app/entity/category_health.py` L7-38](../app/entity/category_health.py#L7-L38)
-- <<entity>> `IDP` - [`app/entity/idp.py` L10-197](../app/entity/idp.py#L10-L197)
+- <<entity>> `IDP` - [`app/entity/idp.py` L10-195](../app/entity/idp.py#L10-L195)
 
 **Flow of each page (in call order)**
 
@@ -1216,7 +1227,7 @@ The period and date are validated and turned into a date range by `report_period
 - <<boundary>> `CategoryHealthPg.displayCategoryHealth()` - [`app/boundary/category_health_page.py` L14-15](../app/boundary/category_health_page.py#L14-L15)
   - <<control>> `CategoryHealthController.generateHealthReport()` - [`app/control/category_health_controller.py` L10-15](../app/control/category_health_controller.py#L10-L15)
     - <<entity>> `Category.getAllCategories()` - [`app/entity/category.py` L24-27](../app/entity/category.py#L24-L27)
-    - <<entity>> `IDP.getCategoryStatistics()` - [`app/entity/idp.py` L172-197](../app/entity/idp.py#L172-L197)
+    - <<entity>> `IDP.getCategoryStatistics()` - [`app/entity/idp.py` L170-195](../app/entity/idp.py#L170-L195)
     - <<control>> `CategoryHealthController._calculateHealthScores()` - [`app/control/category_health_controller.py` L17-23](../app/control/category_health_controller.py#L17-L23)
       - <<entity>> `CategoryHealth.calculateScore()` - [`app/entity/category_health.py` L25-38](../app/entity/category_health.py#L25-L38)
   - <<boundary>> `CategoryHealthPg.displayHealthReport()` - [`app/boundary/category_health_page.py` L17-18](../app/boundary/category_health_page.py#L17-L18)
@@ -1250,47 +1261,47 @@ The period and date are validated and turned into a date range by `report_period
 
 **Classes**
 
-- <<boundary>> `CreateEstimationRulePg` - [`app/boundary/estimation_rule_page.py` L19-64](../app/boundary/estimation_rule_page.py#L19-L64)
-- <<control>> `CreateEstimationRuleController` - [`app/control/create_estimation_rule_controller.py` L11-85](../app/control/create_estimation_rule_controller.py#L11-L85)
+- <<boundary>> `CreateEstimationRulePg` - [`app/boundary/estimation_rule_page.py` L19-63](../app/boundary/estimation_rule_page.py#L19-L63)
+- <<control>> `CreateEstimationRuleController` - [`app/control/create_estimation_rule_controller.py` L11-84](../app/control/create_estimation_rule_controller.py#L11-L84)
 - <<entity>> `Category` - [`app/entity/category.py` L6-92](../app/entity/category.py#L6-L92)
 - <<entity>> `EstimationRule` - [`app/entity/estimation_rule.py` L8-76](../app/entity/estimation_rule.py#L8-L76)
 - <<entity>> `UnitRate` - [`app/entity/unit_rate.py` L5-42](../app/entity/unit_rate.py#L5-L42)
 
 **Flow of each page (in call order)**
 
-**GET `/sales/estimation-rules/`** - route `displayEstimationRuleForm()` [`app/boundary/estimation_rule_page.py` L67-70](../app/boundary/estimation_rule_page.py#L67-L70)
+**GET `/sales/estimation-rules/`** - route `displayEstimationRuleForm()` [`app/boundary/estimation_rule_page.py` L66-69](../app/boundary/estimation_rule_page.py#L66-L69)
 
-- <<boundary>> `CreateEstimationRulePg.displayEstimationRuleForm()` - [`app/boundary/estimation_rule_page.py` L23-25](../app/boundary/estimation_rule_page.py#L23-L25)
+- <<boundary>> `CreateEstimationRulePg.displayEstimationRuleForm()` - [`app/boundary/estimation_rule_page.py` L23-24](../app/boundary/estimation_rule_page.py#L23-L24)
   - <<control>> `CreateEstimationRuleController.getActiveRule()` - [`app/control/create_estimation_rule_controller.py` L15-17](../app/control/create_estimation_rule_controller.py#L15-L17)
     - <<entity>> `EstimationRule.findActive()` - [`app/entity/estimation_rule.py` L33-37](../app/entity/estimation_rule.py#L33-L37)
-  - <<boundary>> `CreateEstimationRulePg.showCurrentRule()` - [`app/boundary/estimation_rule_page.py` L27-38](../app/boundary/estimation_rule_page.py#L27-L38)
+  - <<boundary>> `CreateEstimationRulePg.showCurrentRule()` - [`app/boundary/estimation_rule_page.py` L26-37](../app/boundary/estimation_rule_page.py#L26-L37)
     - <<control>> `CreateEstimationRuleController.getStyles()` - [`app/control/create_estimation_rule_controller.py` L19-21](../app/control/create_estimation_rule_controller.py#L19-L21)
       - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
-    - <<boundary>> `CreateEstimationRulePg._itemRows()` - [`app/boundary/estimation_rule_page.py` L40-45](../app/boundary/estimation_rule_page.py#L40-L45)
+    - <<boundary>> `CreateEstimationRulePg._itemRows()` - [`app/boundary/estimation_rule_page.py` L39-44](../app/boundary/estimation_rule_page.py#L39-L44)
     - <<control>> `CreateEstimationRuleController.getUnits()` - [`app/control/create_estimation_rule_controller.py` L23-24](../app/control/create_estimation_rule_controller.py#L23-L24)
     - page: `app/templates/estimation_rule.html`
 
-**POST `/sales/estimation-rules/`** - route `clickSave()` [`app/boundary/estimation_rule_page.py` L73-76](../app/boundary/estimation_rule_page.py#L73-L76)
+**POST `/sales/estimation-rules/`** - route `clickSave()` [`app/boundary/estimation_rule_page.py` L72-75](../app/boundary/estimation_rule_page.py#L72-L75)
 
-- <<boundary>> `CreateEstimationRulePg.clickSave()` - [`app/boundary/estimation_rule_page.py` L47-55](../app/boundary/estimation_rule_page.py#L47-L55)
-  - <<boundary>> `CreateEstimationRulePg._itemRows()` - [`app/boundary/estimation_rule_page.py` L40-45](../app/boundary/estimation_rule_page.py#L40-L45)
+- <<boundary>> `CreateEstimationRulePg.clickSave()` - [`app/boundary/estimation_rule_page.py` L46-54](../app/boundary/estimation_rule_page.py#L46-L54)
+  - <<boundary>> `CreateEstimationRulePg._itemRows()` - [`app/boundary/estimation_rule_page.py` L39-44](../app/boundary/estimation_rule_page.py#L39-L44)
   - <<control>> `CreateEstimationRuleController.createEstimationRule()` - [`app/control/create_estimation_rule_controller.py` L26-35](../app/control/create_estimation_rule_controller.py#L26-L35)
-    - <<control>> `CreateEstimationRuleController._validateRule()` - [`app/control/create_estimation_rule_controller.py` L38-67](../app/control/create_estimation_rule_controller.py#L38-L67)
+    - <<control>> `CreateEstimationRuleController._validateRule()` - [`app/control/create_estimation_rule_controller.py` L37-66](../app/control/create_estimation_rule_controller.py#L37-L66)
       - <<control>> `CreateEstimationRuleController.getStyles()` - [`app/control/create_estimation_rule_controller.py` L19-21](../app/control/create_estimation_rule_controller.py#L19-L21)
         - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
-    - <<control>> `CreateEstimationRuleController._assignItemCodes()` - [`app/control/create_estimation_rule_controller.py` L69-85](../app/control/create_estimation_rule_controller.py#L69-L85)
+    - <<control>> `CreateEstimationRuleController._assignItemCodes()` - [`app/control/create_estimation_rule_controller.py` L68-84](../app/control/create_estimation_rule_controller.py#L68-L84)
       - <<entity>> `UnitRate.getActiveRates()` - [`app/entity/unit_rate.py` L25-31](../app/entity/unit_rate.py#L25-L31)
       - <<entity>> `UnitRate.getAllCodes()` - [`app/entity/unit_rate.py` L39-42](../app/entity/unit_rate.py#L39-L42)
     - <<entity>> `EstimationRule.saveRule()` - [`app/entity/estimation_rule.py` L50-72](../app/entity/estimation_rule.py#L50-L72)
-  - <<boundary>> `CreateEstimationRulePg.displaySuccessPg()` - [`app/boundary/estimation_rule_page.py` L57-61](../app/boundary/estimation_rule_page.py#L57-L61)
+  - <<boundary>> `CreateEstimationRulePg.displaySuccessPg()` - [`app/boundary/estimation_rule_page.py` L56-60](../app/boundary/estimation_rule_page.py#L56-L60)
     - page: `app/templates/success.html`
-  - <<boundary>> `CreateEstimationRulePg.displayErrorMsg()` - [`app/boundary/estimation_rule_page.py` L63-64](../app/boundary/estimation_rule_page.py#L63-L64)
+  - <<boundary>> `CreateEstimationRulePg.displayErrorMsg()` - [`app/boundary/estimation_rule_page.py` L62-63](../app/boundary/estimation_rule_page.py#L62-L63)
     - <<control>> `CreateEstimationRuleController.getActiveRule()` - [`app/control/create_estimation_rule_controller.py` L15-17](../app/control/create_estimation_rule_controller.py#L15-L17)
       - <<entity>> `EstimationRule.findActive()` - [`app/entity/estimation_rule.py` L33-37](../app/entity/estimation_rule.py#L33-L37)
-    - <<boundary>> `CreateEstimationRulePg.showCurrentRule()` - [`app/boundary/estimation_rule_page.py` L27-38](../app/boundary/estimation_rule_page.py#L27-L38)
+    - <<boundary>> `CreateEstimationRulePg.showCurrentRule()` - [`app/boundary/estimation_rule_page.py` L26-37](../app/boundary/estimation_rule_page.py#L26-L37)
       - <<control>> `CreateEstimationRuleController.getStyles()` - [`app/control/create_estimation_rule_controller.py` L19-21](../app/control/create_estimation_rule_controller.py#L19-L21)
         - <<entity>> `Category.getActiveCategories()` - [`app/entity/category.py` L29-33](../app/entity/category.py#L29-L33)
-      - <<boundary>> `CreateEstimationRulePg._itemRows()` - [`app/boundary/estimation_rule_page.py` L40-45](../app/boundary/estimation_rule_page.py#L40-L45)
+      - <<boundary>> `CreateEstimationRulePg._itemRows()` - [`app/boundary/estimation_rule_page.py` L39-44](../app/boundary/estimation_rule_page.py#L39-L44)
       - <<control>> `CreateEstimationRuleController.getUnits()` - [`app/control/create_estimation_rule_controller.py` L23-24](../app/control/create_estimation_rule_controller.py#L23-L24)
       - page: `app/templates/estimation_rule.html`
 
@@ -1331,7 +1342,7 @@ The period and date are validated and turned into a date range by `report_period
 **Classes**
 
 - <<boundary>> `ExportSalesReportPg` - [`app/boundary/sales_report_page.py` L11-31](../app/boundary/sales_report_page.py#L11-L31)
-- <<control>> `ExportSalesReportController` - [`app/control/export_sales_report_controller.py` L6-33](../app/control/export_sales_report_controller.py#L6-L33)
+- <<control>> `ExportSalesReportController` - [`app/control/export_sales_report_controller.py` L6-31](../app/control/export_sales_report_controller.py#L6-L31)
 - <<entity>> `SalesReport` - [`app/entity/sales_report.py` L49-82](../app/entity/sales_report.py#L49-L82)
 - <<entity>> `SalesReportRow` - [`app/entity/sales_report.py` L11-46](../app/entity/sales_report.py#L11-L46)
 
@@ -1346,8 +1357,8 @@ The period and date are validated and turned into a date range by `report_period
 
 - <<boundary>> `ExportSalesReportPg.clickExport()` - [`app/boundary/sales_report_page.py` L20-24](../app/boundary/sales_report_page.py#L20-L24)
   - <<control>> `ExportSalesReportController.exportSalesReport()` - [`app/control/export_sales_report_controller.py` L11-22](../app/control/export_sales_report_controller.py#L11-L22)
-    - <<control>> `ExportSalesReportController._validatePeriod()` - [`app/control/export_sales_report_controller.py` L25-28](../app/control/export_sales_report_controller.py#L25-L28)
-    - <<control>> `ExportSalesReportController._calculateDateRange()` - [`app/control/export_sales_report_controller.py` L31-33](../app/control/export_sales_report_controller.py#L31-L33)
+    - <<control>> `ExportSalesReportController._validatePeriod()` - [`app/control/export_sales_report_controller.py` L24-27](../app/control/export_sales_report_controller.py#L24-L27)
+    - <<control>> `ExportSalesReportController._calculateDateRange()` - [`app/control/export_sales_report_controller.py` L29-31](../app/control/export_sales_report_controller.py#L29-L31)
     - <<entity>> `SalesReportRow.findByDateRange()` - [`app/entity/sales_report.py` L27-46](../app/entity/sales_report.py#L27-L46)
     - <<entity>> `SalesReport.calculateTotals()` - [`app/entity/sales_report.py` L61-65](../app/entity/sales_report.py#L61-L65)
     - <<entity>> `SalesReport.toCSV()` - [`app/entity/sales_report.py` L70-79](../app/entity/sales_report.py#L70-L79)

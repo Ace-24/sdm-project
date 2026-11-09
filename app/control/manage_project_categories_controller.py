@@ -22,27 +22,25 @@ class ManageProjectCategoriesController:
         return Category.getActiveCategories()
 
     def updateIDPCategories(self, idp, categoryIDs):
-        """Main flow steps 5-7. Returns True if saved."""
+        """Returns True if saved."""
         categoryIDs = sorted(set(categoryIDs))
         if not self._validateCategories(categoryIDs):
             return False
         IDPCategory.replaceLinks(idp.idpID, categoryIDs)
-        # Sub-flow S2 - only active projects are recommended
+        # only active projects are recommended
         customers = CustomerPreference.findCustomersByCategories(categoryIDs) if idp.status == IDP_ACTIVE else []
         Recommendation.refreshRecommendations(idp.idpID, customers)
         self.matchedCustomers = len(customers)
         return True
 
-    # ---- Sub-flow S1: Validate Category Selection ----
     def _validateCategories(self, categoryIDs):
         self.errorMsg = None
         active = {c.categoryID for c in Category.getActiveCategories()}
         if not (MIN_CATEGORIES <= len(categoryIDs) <= MAX_CATEGORIES) or not set(categoryIDs) <= active:
-            self.errorMsg = "Please select 1 to 5 active categories"      # E1
+            self.errorMsg = "Please select 1 to 5 active categories"
             return False
         return True
 
-    # ---- A2: Request New Category ----
     def requestNewCategory(self, designer, categoryName, reason):
         self.errorMsg = None
         categoryName, reason = (categoryName or "").strip(), (reason or "").strip()

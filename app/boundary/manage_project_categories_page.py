@@ -19,7 +19,6 @@ class ManageProjectCategoriesPg:
         return idp
 
     def displayCategoryForm(self, idpID, error=None, selectedIDs=None):
-        """Main flow steps 1-2."""
         idp = self._ownIDP(idpID)
         categories = self.controller.getActiveCategories()
         if selectedIDs is None:
@@ -31,7 +30,6 @@ class ManageProjectCategoriesPg:
                                selected=set(selectedIDs), error=error)
 
     def submitCategories(self, idpID, categoryIDs):
-        """Main flow step 4."""
         idp = self._ownIDP(idpID)
         if self.controller.updateIDPCategories(idp, categoryIDs):
             return self.displaySuccessPg(self.controller.matchedCustomers)
@@ -46,7 +44,6 @@ class ManageProjectCategoriesPg:
         return self.displayCategoryForm(idpID, msg, categoryIDs)
 
     def clickRequestCategory(self, idpID, name, reason):
-        """A2 - Request New Category."""
         self._ownIDP(idpID)
         if self.controller.requestNewCategory(g.user, name, reason):
             flash(f"Your request for '{name.strip()}' was sent to the Platform Manager.", "success")

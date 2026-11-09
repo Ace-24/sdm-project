@@ -9,11 +9,11 @@ class ExportSalesReportController:
         self.report = None
 
     def exportSalesReport(self, salesManagerID, periodType, refDate):
-        """Main flow steps 5-9. Returns the CSV text, or None (with errorMsg) if the period is invalid."""
+        """Returns the CSV text, or None (with errorMsg) if the period is invalid."""
         self.errorMsg = None
         day = self._validatePeriod(periodType, refDate)
         if day is None:
-            self.errorMsg = "Please select a report period and a date that is not in the future"   # E1
+            self.errorMsg = "Please select a report period and a date that is not in the future"
             return None
         start, end = self._calculateDateRange(periodType, day)
         rows = SalesReportRow.findByDateRange(start, end)
@@ -21,13 +21,11 @@ class ExportSalesReportController:
         self.report.calculateTotals()
         return self.report.toCSV()
 
-    # ---- Sub-flow S1: Validate Report Period ----
     @staticmethod
     def _validatePeriod(periodType, refDate):
         """Returns the date if valid, otherwise None."""
         return report_period.validatePeriod(periodType, refDate)
 
-    # ---- Main flow step 6 ----
     @staticmethod
     def _calculateDateRange(periodType, day):
         return report_period.calculateDateRange(periodType, day)

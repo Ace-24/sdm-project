@@ -13,7 +13,7 @@ Each story follows the same Boundary-Control-Entity (BCE) structure as its class
 | - | Browse / Search Projects | Anyone | `BrowseIDPPg` | `BrowseIDPController` | `Category`, `IDP` | 15 |
 | - | View Project + Save to Favourites | Anyone / Customer | `ViewIDPPg` | `ViewIDPController` | `CompanyProfile`, `EstimationRule`, `Favourite`, `IDP`, `IDPCostItem`, `IDPView` | 15 |
 | #1 | Create User Account | User Admin | `CreateUserAccountPg` | `CreateUserAccountController` | `Notification`, `UserAccount`, `UserProfile` | 12 |
-| #7 | View Account Activity Log | User Admin | `ViewActivityLogPg` | `ViewActivityLogController` | `ActivityLog`, `UserAccount` | 19 |
+| #7 | View Account Activity Log | User Admin | `ViewActivityLogPg` | `ViewActivityLogController` | `ActivityLog`, `UserAccount` | 20 |
 | - | Edit User Account | User Admin | `EditUserAccountPg` | `EditUserAccountController` | `ActivityLog`, `UserAccount`, `UserProfile` | 15 |
 | - | Manage User Profiles | User Admin | `ManageUserProfilesPg` | `ManageUserProfilesController` | `UserProfile` | 15 |
 | - | Manage Company Information + Designer Page | Interior Designer / Anyone | `ManageCompanyProfilePg`, `DesignerPg` | `ManageCompanyProfileController` | `CompanyProfile`, `IDP`, `UserAccount` | 8 |
@@ -29,7 +29,7 @@ Each story follows the same Boundary-Control-Entity (BCE) structure as its class
 | #47 | Create Cost Estimation Rules | Sales Manager | `CreateEstimationRulePg` | `CreateEstimationRuleController` | `Category`, `EstimationRule`, `UnitRate` | 25 |
 | #50 | Export Sales Report | Sales Manager | `ExportSalesReportPg` | `ExportSalesReportController` | `SalesReport`, `SalesReportRow` | 11 |
 
-Total: **233** test functions for these stories, plus `tests/test_generate_test_data.py` for the test data. pytest reports a higher number because parameterised tests run once per input value.
+Total: **234** test functions for these stories, plus `tests/test_generate_test_data.py` for the test data. pytest reports a higher number because parameterised tests run once per input value.
 
 ### Naming between design and code
 
@@ -314,10 +314,11 @@ Total: **233** test functions for these stories, plus `tests/test_generate_test_
 **`ViewActivityLogPg` methods (boundary)**
 
 - `+ searchAccount(keyword, profileName)`
-- `+ displayAccountList(keyword, profileName, accounts)`
+- `+ displayAccountList(keyword, profileName, accounts, error)`
 - `+ displayActivityLog(accountID, args)`
 - `+ filterLog(accountID, activityType, fromDate, toDate)`
-- `+ displayLogList(account, logs, filters)`
+- `+ displayLogList(account, logs, filters, error)`
+- `+ displayErrorMsg(msg, account, filters, keyword, profileName)`
 - `+ clickExport(accountID, args)`
 - `+ clickSuspend(accountID)`
 
@@ -351,7 +352,7 @@ Total: **233** test functions for these stories, plus `tests/test_generate_test_
 
 **Templates:** `app/templates/activity_log.html`, `app/templates/activity_search.html`
 
-**Unit tests:** `tests/test_us07_view_activity_log.py` (19 tests)
+**Unit tests:** `tests/test_us07_view_activity_log.py` (20 tests)
 
 ## Edit User Account
 

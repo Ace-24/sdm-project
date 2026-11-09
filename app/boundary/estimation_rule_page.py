@@ -21,13 +21,12 @@ class CreateEstimationRulePg:
         self.controller = CreateEstimationRuleController()
 
     def displayEstimationRuleForm(self):
-        """Main flow 1-2: show the current active rule."""
         return self.showCurrentRule(self.controller.getActiveRule())
 
     def showCurrentRule(self, rule, entered=None, errors=None):
         styles = self.controller.getStyles()
         current = {r.itemCode: r for r in rule.unitRates} if rule else {}
-        if entered is not None:                      # show the list exactly as the Sales Manager edited it
+        if entered is not None:
             items = [{"code": c, "name": n, "unit": u, "rate": v, "current": current.get(c)}
                      for c, n, u, v in self._itemRows(entered)]
         else:
@@ -45,7 +44,7 @@ class CreateEstimationRulePg:
         return [r for r in rows if r[1].strip() or r[3].strip()]       # skip new rows left empty (no name, no rate)
 
     def clickSave(self, form):
-        """Main flow 6: build the new rule from the form and ask the controller to save it."""
+        """Build the new rule from the form and ask the controller to save it."""
         rule = EstimationRule(None, form.get("rule_name", "").strip(), g.user.accountID)
         rule.unitRates = [UnitRate(code, name, unit, _num(rate)) for code, name, unit, rate in self._itemRows(form)]
         rule.propertyFactors = {k[5:]: _num(v) for k, v in form.items() if k.startswith("prop:")}

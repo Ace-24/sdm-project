@@ -12,16 +12,16 @@ class ViewActivityLogController:
         self.errorMsg = None
 
     def searchUserAccount(self, keyword, profileName=None):
-        """Sub-flow S1 - accounts matching the keyword (username, name or email).
+        """Accounts matching the keyword (username, name or email).
         With no keyword, every current account is listed so the admin can browse."""
         return UserAccount.searchUserAccounts(keyword, profileName or None)
 
     def viewActivityLog(self, accountID):
-        """Main flow step 4 - all entries, newest first."""
+        """All entries, newest first."""
         return ActivityLog.getActivityLog(accountID)
 
     def filterActivityLog(self, accountID, activityType=None, fromDate=None, toDate=None):
-        """A1 - Filter Activity Log. Returns None (and sets errorMsg) if the filter is invalid."""
+        """Returns None (and sets errorMsg) if the filter is invalid."""
         self.errorMsg = None
         if activityType and activityType not in ACTIVITY_TYPES:
             self.errorMsg = "Unknown activity type."
@@ -38,7 +38,7 @@ class ViewActivityLogController:
         return ActivityLog.getFilteredLog(accountID, activityType or None, fromDate or None, toDate or None)
 
     def exportActivityLog(self, logs):
-        """A2 - Export Activity Log: the displayed entries as CSV text."""
+        """The displayed entries as CSV text."""
         out = io.StringIO()
         writer = csv.writer(out)
         writer.writerow(["Date/Time", "Activity Type", "Description", "Performed By", "IP Address"])
@@ -47,7 +47,7 @@ class ViewActivityLogController:
         return out.getvalue()
 
     def suspendUserAccount(self, accountID, adminID, ipAddress=None):
-        """A3 - Suspend User Account. Returns False if it is the admin's own account
+        """Returns False if it is the admin's own account
         or the account is already suspended."""
         account = UserAccount.findById(accountID)
         if account is None or account.accountID == adminID or account.status == ACCOUNT_SUSPENDED:
@@ -59,7 +59,7 @@ class ViewActivityLogController:
         return True
 
     def reactivateUserAccount(self, accountID, adminID, ipAddress=None):
-        """A4 - Reactivate a suspended account (false flag or resolved case)."""
+        """Reactivate a suspended account (false flag or resolved case)."""
         account = UserAccount.findById(accountID)
         if account is None or account.status != ACCOUNT_SUSPENDED:
             return False

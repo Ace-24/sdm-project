@@ -12,7 +12,7 @@ class Favourite:
 
     @staticmethod
     def findByCustomer(customerID):
-        """S1 - the customer's favourites list with each IDP's details, newest first."""
+        """The customer's favourites list with each IDP's details, newest first."""
         from app.entity.idp import IDP
         rows = get_db().execute(
             "SELECT f.favourite_id, f.customer_id, f.idp_id AS fav_idp, f.saved_date, sub.* FROM favourite f "
@@ -23,7 +23,7 @@ class Favourite:
 
     @staticmethod
     def getSelectedIDPs(customerID, idpIDs):
-        """Main flow step 6 - the selected IDPs, only if they are in this customer's favourites."""
+        """The selected IDPs, only if they are in this customer's favourites."""
         wanted = set(idpIDs)
         return [f.idp for f in Favourite.findByCustomer(customerID) if f.idpID in wanted]
 

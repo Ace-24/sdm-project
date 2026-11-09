@@ -13,7 +13,6 @@ class CreateUserAccountPg:
         self.controller = CreateUserAccountController()
 
     def displayCreateUAForm(self, form=None, errors=None):
-        """Main flow 1-2: show the form with the active profiles."""
         profiles = self.controller.getActiveProfiles()
         return self.showProfileList(profiles, form or {}, errors or [])
 
@@ -21,7 +20,6 @@ class CreateUserAccountPg:
         return render_template("create_user_account.html", profiles=profiles, form=form, errors=errors)
 
     def submitUAForm(self, form):
-        """Main flow 5: the User Admin clicks Submit."""
         try:
             profileID = int(form.get("profile_id", ""))
         except ValueError:

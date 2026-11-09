@@ -40,7 +40,7 @@ class Category:
 
     @staticmethod
     def updateStatus(categoryID, status):
-        """#40 A1 - e.g. flag a category 'Under Review'."""
+        """For example, flag a category 'Under Review'."""
         db = get_db()
         db.execute("UPDATE category SET status = ? WHERE category_id = ?", (status, categoryID))
         db.commit()

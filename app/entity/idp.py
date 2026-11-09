@@ -50,7 +50,7 @@ class IDP:
         return IDP._fromRow(row)
 
     def isComparable(self):
-        """#27 S2 - still active and has a floor area."""
+        """Still active and has a floor area."""
         return self.status == IDP_ACTIVE and bool(self.floorArea) and self.floorArea > 0
 
     def getCostPerSqm(self):
@@ -59,7 +59,6 @@ class IDP:
             return 0.0
         return round(self.totalCost / self.floorArea, 2)
 
-    # ---------- #13 Manage Portfolio ----------
     @staticmethod
     def getIDPsByStatus(designerID, status):
         """A designer's IDPs with the given status (or list of statuses),
@@ -72,7 +71,7 @@ class IDP:
         return [IDP._fromRow(r) for r in rows]
 
     def updateIDP(self, costItems=None):
-        """Save edited details (main flow step 8). If costItems are given they replace the
+        """Save edited details. If costItems are given they replace the
         breakdown and the total cost becomes their subtotal."""
         from app.entity.idp_cost_item import IDPCostItem
         self.updatedDate = now_str()
@@ -160,7 +159,7 @@ class IDP:
 
     @staticmethod
     def deleteIDP(idpID):
-        """A5 - permanently remove the IDP and the records that point to it."""
+        """Permanently remove the IDP and the records that point to it."""
         db = get_db()
         for table in ("idp_category", "recommendation", "favourite", "idp_view", "idp_cost_item"):
             db.execute(f"DELETE FROM {table} WHERE idp_id = ?", (idpID,))
@@ -168,10 +167,9 @@ class IDP:
         db.commit()
         return True
 
-    # ---------- #40 Category Health ----------
     @staticmethod
     def getCategoryStatistics(categories, days=30):
-        """S1 - for each category: active IDPs, interest (views + favourites of those IDPs in
+        """For each category: active IDPs, interest (views + favourites of those IDPs in
         the last `days` days) and growth in new IDPs vs the previous `days` days."""
         from app.entity.category_health import CategoryHealth
         db = get_db()

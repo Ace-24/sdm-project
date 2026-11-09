@@ -25,14 +25,14 @@ class ActivityLog:
 
     @staticmethod
     def getActivityLog(accountID):
-        """#7 - every entry for the account, newest first."""
+        """Every entry for the account, newest first."""
         rows = get_db().execute(ActivityLog._SELECT + "WHERE l.account_id = ? ORDER BY l.timestamp DESC, l.log_id DESC",
                                 (accountID,)).fetchall()
         return [ActivityLog._fromRow(r) for r in rows]
 
     @staticmethod
     def getFilteredLog(accountID, activityType=None, fromDate=None, toDate=None):
-        """#7 A1 - entries of one type and/or within a date range (dates are YYYY-MM-DD, inclusive)."""
+        """Entries of one type and/or within a date range (dates are YYYY-MM-DD, inclusive)."""
         sql = ActivityLog._SELECT + "WHERE l.account_id = ? "
         params = [accountID]
         if activityType:
